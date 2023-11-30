@@ -5,12 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.mvpvn.jetpackcomposedemo.core.extension.makeFullScreen
 import com.mvpvn.jetpackcomposedemo.core.navigator.AppNavigator
 import com.mvpvn.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.makeFullScreen()
         setContent {
             MainApp()
         }
@@ -22,7 +25,6 @@ fun MainApp() {
     AppNavigator()
 
 }
-
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

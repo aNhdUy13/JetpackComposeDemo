@@ -1,11 +1,15 @@
 package com.mvpvn.jetpackcomposedemo.core.navigator
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.mvpvn.jetpackcomposedemo.ui.screens.splash.SplashScreen
 import com.mvpvn.jetpackcomposedemo.ui.theme.JetpackComposeDemoTheme
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.composable
+import com.mvpvn.jetpackcomposedemo.ui.Screens
 import com.mvpvn.jetpackcomposedemo.ui.screens.first.login.LoginScreen
 import com.mvpvn.jetpackcomposedemo.ui.screens.first.signup.SignUpScreen
 import com.mvpvn.jetpackcomposedemo.ui.screens.home.HomeScreen
@@ -21,44 +25,59 @@ fun AppNavigator() {
     val navController = rememberNavController()
 
     JetpackComposeDemoTheme {
-        NavHost(navController = navController, startDestination = Screen.Splash.route) {
-            composable(route = Screen.Splash.route) {
+        NavHost(navController = navController, startDestination = Screens.Splash.route) {
+            composable(
+                route = Screens.Splash.route,
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { -1000 },
+                        animationSpec = tween(700)
+                    )
+                },
+            ) {
                 SplashScreen(
-                    navigateHomeScreen = { navController.navigate(Screen.Home.route) },
-                    navigateLoginScreen = { navController.navigate(Screen.Login.route) },
-                    navigateSignUpScreen = { navController.navigate(Screen.SignUp.route) }
+                    navigateHomeScreen = { navController.navigate(Screens.Home.route) },
+                    navigateLoginScreen = { navController.navigate(Screens.Login.route) },
+                    navigateSignUpScreen = { navController.navigate(Screens.SignUp.route) }
                 )
             }
 
-            composable(route = Screen.Login.route) {
+            composable(
+                route = Screens.Login.route,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { -1000 },
+                        animationSpec = tween(700)
+                    )
+                }) {
                 LoginScreen()
             }
 
-            composable(route = Screen.SignUp.route) {
+            composable(route = Screens.SignUp.route) {
                 SignUpScreen()
             }
 
-            composable(route = Screen.Home.route) {
+            composable(route = Screens.Home.route) {
                 HomeScreen()
             }
 
-            composable(route = Screen.Task.route) {
+            composable(route = Screens.Task.route) {
                 TaskScreen()
             }
 
-            composable(route = Screen.CompletedTask.route) {
+            composable(route = Screens.CompletedTask.route) {
                 CompletedTaskScreen()
             }
 
-            composable(route = Screen.OnGoingTask.route) {
+            composable(route = Screens.OnGoingTask.route) {
                 OnGoingTaskScreen()
             }
 
-            composable(route = Screen.PendingTask.route) {
+            composable(route = Screens.PendingTask.route) {
                 PendingTaskScreen()
             }
 
-            composable(route = Screen.CanceledTask.route) {
+            composable(route = Screens.CanceledTask.route) {
                 CanceledTaskScreen()
             }
         }
