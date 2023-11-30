@@ -7,15 +7,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.mvpvn.jetpackcomposedemo.R
 
-val sintonyFont = FontFamily(Font(R.font.sintony))
+val hiraginoSansFont = FontFamily(Font(R.font.hiragino_sans_w4))
+val hiraginoSansBoldFont = FontFamily(Font(R.font.hiragino_sans_w6))
 
 val text = TextStyle(
-    fontFamily = FontFamily.Default,
-    fontSize = 14.sp
+    fontFamily = hiraginoSansFont,
+    fontSize = 14.sp,
+    fontWeight = FontWeight.Thin
 )
 
 val textBold = TextStyle(
-    fontFamily = FontFamily.Default,
+    fontFamily = hiraginoSansBoldFont,
     fontSize = 14.sp,
     fontWeight = FontWeight.Bold
 )

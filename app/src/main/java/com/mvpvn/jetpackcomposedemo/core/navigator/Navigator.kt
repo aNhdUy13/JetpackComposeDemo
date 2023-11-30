@@ -28,12 +28,18 @@ fun AppNavigator() {
         NavHost(navController = navController, startDestination = Screens.Splash.route) {
             composable(
                 route = Screens.Splash.route,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { -1000 },
+                        animationSpec = tween(700)
+                    )
+                },
                 exitTransition = {
                     slideOutHorizontally(
                         targetOffsetX = { -1000 },
                         animationSpec = tween(700)
                     )
-                },
+                }
             ) {
                 SplashScreen(
                     navigateHomeScreen = { navController.navigate(Screens.Home.route) },
@@ -46,10 +52,17 @@ fun AppNavigator() {
                 route = Screens.Login.route,
                 enterTransition = {
                     slideInHorizontally(
-                        initialOffsetX = { -1000 },
+                        initialOffsetX = { 1000 },
                         animationSpec = tween(700)
                     )
-                }) {
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { 1000 },
+                        animationSpec = tween(700)
+                    )
+                }
+            ) {
                 LoginScreen()
             }
 

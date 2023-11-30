@@ -3,4 +3,9 @@
     <string name="splash_greeting">Plan what you will do to be more organized for today, tomorrow and beyond</string>
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
+    <string name="input_email_username">Email ID or Username</string>
+    <string name="input_password">Password</string>
+    <string name="forgot_password">Forgot Password ?</string>
+    <string name="or_with">or with</string>
+    <string name="dont_have_account">Don’t have an account?</string>
 </resources>

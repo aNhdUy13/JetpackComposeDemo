@@ -46,7 +46,7 @@ fun SplashScreen(
     ) {
         Spacer(
             modifier = Modifier
-                .height(dimensionResource(id = R.dimen.dp128))
+                .height(dimensionResource(id = R.dimen.dp120))
                 .systemBarsPadding()
         )
         Image(
@@ -65,7 +65,9 @@ fun SplashScreen(
             modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.dp7)),
             color = colorResource(id = R.color.splash_greeting),
             textAlign = TextAlign.Center,
-            style = text
+            style = text.copy(
+                fontSize = R.dimen.sp15.toSp()
+            )
         )
         Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.dp65)))
         Button(
@@ -91,7 +93,7 @@ fun SplashScreen(
             modifier = Modifier
                 .clickable { navigateSignUpScreen() }
                 .navigationBarsPadding(),
-            color = colorResource(id = R.color.black),
+            color = colorResource(id = R.color.button_color),
             fontSize = R.dimen.sp16.toSp(),
             style = textBold
         )

@@ -8,6 +8,10 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="divider">#E3E8F1</color>
+    <color name="text_hint">#C6CEDD</color>
     <color name="splash_greeting">#2C406E</color>
     <color name="button_color">#5B67CA</color>
+    <color name="dark_blue">#596685</color>
+    <color name="hint">#A4A4A6</color>
 </resources>
