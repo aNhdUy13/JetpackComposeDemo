@@ -26,7 +26,7 @@ fun MainApp() {
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun GreetingPreview() {
+fun MainPreview() {
     JetpackComposeDemoTheme {
         MainApp()
     }
