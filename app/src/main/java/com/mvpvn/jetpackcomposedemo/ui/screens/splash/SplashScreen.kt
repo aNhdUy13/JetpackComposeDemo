@@ -46,7 +46,7 @@ fun SplashScreen(
     ) {
         Spacer(
             modifier = Modifier
-                .height(dimensionResource(id = R.dimen.dp120))
+                .height(dimensionResource(id = R.dimen.dp118))
                 .systemBarsPadding()
         )
         Image(

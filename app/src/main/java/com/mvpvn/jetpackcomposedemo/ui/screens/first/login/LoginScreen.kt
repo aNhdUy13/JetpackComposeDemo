@@ -2,6 +2,7 @@ package com.mvpvn.jetpackcomposedemo.ui.screens.first.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
@@ -43,7 +45,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -51,26 +52,17 @@ import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
+import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
-import com.mvpvn.jetpackcomposedemo.utilities.dp1
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(navigateSignUpScreen: () -> Unit) {
+    val provideDimension = provideDimensions()
+
     val textEmailState = remember { mutableStateOf("") }
     val textPasswordState = remember { mutableStateOf("") }
     val passwordVisibility = remember { mutableStateOf(false) }
-
-    val dp130 = dimensionResource(id = R.dimen.dp130)
-    val dp110 = dimensionResource(id = R.dimen.dp110)
-    val dp76 = dimensionResource(id = R.dimen.dp76)
-    val dp55 = dimensionResource(id = R.dimen.dp55)
-    val dp38 = dimensionResource(id = R.dimen.dp38)
-    val dp32 = dimensionResource(id = R.dimen.dp32)
-    val dp16 = dimensionResource(id = R.dimen.dp16)
-    val dp15 = dimensionResource(id = R.dimen.dp15)
-    val dp6 = dimensionResource(id = R.dimen.dp6)
-    val dp3 = dimensionResource(id = R.dimen.dp3)
 
     ConstraintLayout(
         modifier = Modifier
@@ -88,10 +80,12 @@ fun LoginScreen() {
 
         Text(
             text = stringResource(id = R.string.login),
-            modifier = Modifier.constrainAs(titleLogin) {
+            modifier = Modifier
+                .systemBarsPadding()
+                .constrainAs(titleLogin) {
                 top.linkTo(
                     anchor = parent.top,
-                    margin = dp110
+                    margin = provideDimension.dp70
                 )
                 start.linkTo(parent.start)
             },
@@ -109,7 +103,7 @@ fun LoginScreen() {
                 .constrainAs(textFieldEmail) {
                     top.linkTo(
                         anchor = titleLogin.bottom,
-                        margin = dp76
+                        margin = provideDimension.dp65
                     )
                     start.linkTo(parent.start)
                 },
@@ -117,7 +111,7 @@ fun LoginScreen() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = dp15, horizontal = dp3),
+                        .padding(vertical = provideDimension.dp15, horizontal = provideDimension.dp3),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -125,7 +119,7 @@ fun LoginScreen() {
                         contentDescription = "Email Icon",
                         tint = colorResource(id = R.color.hint)
                     )
-                    Spacer(modifier = Modifier.width(dp15))
+                    Spacer(modifier = Modifier.width(provideDimension.dp15))
                     Box(modifier = Modifier.weight(1f)) {
                         innerTextField()
                         if (textEmailState.value.isEmpty()) {
@@ -167,7 +161,7 @@ fun LoginScreen() {
                 .constrainAs(textFieldPassword) {
                     top.linkTo(
                         anchor = textFieldEmail.bottom,
-                        margin = dp32
+                        margin = provideDimension.dp32
                     )
                     start.linkTo(parent.start)
                 },
@@ -176,7 +170,7 @@ fun LoginScreen() {
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = dp15, horizontal = dp3),
+                        .padding(vertical = provideDimension.dp15, horizontal = provideDimension.dp3),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
@@ -184,7 +178,7 @@ fun LoginScreen() {
                         contentDescription = "Password Icon",
                         tint = colorResource(id = R.color.hint)
                     )
-                    Spacer(modifier = Modifier.width(dp15))
+                    Spacer(modifier = Modifier.width(provideDimension.dp15))
                     Box(modifier = Modifier.weight(1f)) {
                         innerTextField()
                         if (textPasswordState.value.isEmpty()) {
@@ -197,7 +191,8 @@ fun LoginScreen() {
                             )
                         }
                     }
-                    val icon = if (passwordVisibility.value) R.drawable.ic_show_password else R.drawable.ic_hide_password
+                    val icon =
+                        if (passwordVisibility.value) R.drawable.ic_show_password else R.drawable.ic_hide_password
                     IconButton(
                         onClick = { passwordVisibility.value = !passwordVisibility.value },
                         modifier = Modifier.size(24.dp)
@@ -237,7 +232,7 @@ fun LoginScreen() {
                 .constrainAs(forgetPassword) {
                     top.linkTo(
                         anchor = textFieldPassword.bottom,
-                        margin = dp16
+                        margin = provideDimension.dp16
                     )
                     end.linkTo(parent.end)
                 },
@@ -254,7 +249,7 @@ fun LoginScreen() {
                 .constrainAs(buttonLogin) {
                     top.linkTo(
                         anchor = forgetPassword.bottom,
-                        margin = dp55
+                        margin = provideDimension.dp55
                     )
                 },
             shape = RoundedCornerShape(dimensionResource(id = R.dimen.dp14)),
@@ -274,7 +269,7 @@ fun LoginScreen() {
                 .constrainAs(dividerOrWith) {
                     top.linkTo(
                         anchor = buttonLogin.bottom,
-                        margin = dp55
+                        margin = provideDimension.dp55
                     )
                 },
             color = colorResource(id = R.color.divider),
@@ -303,7 +298,7 @@ fun LoginScreen() {
             modifier = Modifier.constrainAs(imageGoogle) {
                 top.linkTo(
                     anchor = titleOrWith.bottom,
-                    margin = dp38
+                    margin = provideDimension.dp38
                 )
                 start.linkTo(anchor = parent.start)
                 end.linkTo(anchor = spacerAdditionalLoginMethod.start)
@@ -311,7 +306,7 @@ fun LoginScreen() {
         )
         Spacer(
             modifier = Modifier
-                .width(dp16)
+                .width(provideDimension.dp16)
                 .constrainAs(spacerAdditionalLoginMethod) {
                     top.linkTo(imageGoogle.top)
                     bottom.linkTo(imageGoogle.bottom)
@@ -357,13 +352,14 @@ fun LoginScreen() {
             },
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable { navigateSignUpScreen() }
                 .wrapContentWidth(Alignment.CenterHorizontally)
                 .padding(bottom = dimensionResource(id = R.dimen.dp10))
                 .navigationBarsPadding()
                 .constrainAs(signUp) {
                     top.linkTo(
                         anchor = imageGoogle.bottom,
-                        margin = dp130
+                        margin = provideDimension.dp130
                     )
                 },
             fontSize = R.dimen.sp14.toSp()

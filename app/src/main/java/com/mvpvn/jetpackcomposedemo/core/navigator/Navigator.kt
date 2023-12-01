@@ -31,13 +31,13 @@ fun AppNavigator() {
                 enterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { -1000 },
-                        animationSpec = tween(700)
+                        animationSpec = tween(500)
                     )
                 },
                 exitTransition = {
                     slideOutHorizontally(
                         targetOffsetX = { -1000 },
-                        animationSpec = tween(700)
+                        animationSpec = tween(500)
                     )
                 }
             ) {
@@ -53,24 +53,54 @@ fun AppNavigator() {
                 enterTransition = {
                     slideInHorizontally(
                         initialOffsetX = { 1000 },
-                        animationSpec = tween(700)
+                        animationSpec = tween(500)
                     )
                 },
                 exitTransition = {
                     slideOutHorizontally(
                         targetOffsetX = { 1000 },
-                        animationSpec = tween(700)
+                        animationSpec = tween(500)
                     )
                 }
             ) {
-                LoginScreen()
+                LoginScreen(navigateSignUpScreen = { navController.navigate(Screens.SignUp.route) })
             }
 
-            composable(route = Screens.SignUp.route) {
-                SignUpScreen()
+            composable(
+                route = Screens.SignUp.route,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { 1000 },
+                        animationSpec = tween(500)
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { 1000 },
+                        animationSpec = tween(500)
+                    )
+                }
+            ) {
+                SignUpScreen(
+                    navigateSignInScreen = { navController.navigate(Screens.Login.route) }
+                )
             }
 
-            composable(route = Screens.Home.route) {
+            composable(
+                route = Screens.Home.route,
+                enterTransition = {
+                    slideInHorizontally(
+                        initialOffsetX = { 1000 },
+                        animationSpec = tween(500)
+                    )
+                },
+                exitTransition = {
+                    slideOutHorizontally(
+                        targetOffsetX = { 1000 },
+                        animationSpec = tween(500)
+                    )
+                }
+            ) {
                 HomeScreen()
             }
 
