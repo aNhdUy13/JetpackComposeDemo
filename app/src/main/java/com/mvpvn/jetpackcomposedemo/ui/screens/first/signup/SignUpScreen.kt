@@ -47,7 +47,10 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 
 @Composable
-fun SignUpScreen(navigateSignInScreen: () -> Unit) {
+fun SignUpScreen(
+    navigateMainScreen: () -> Unit,
+    navigateSignInScreen: () -> Unit
+) {
     val provideDimension = provideDimensions()
 
     val textUserNameState = remember { mutableStateOf("") }
@@ -270,7 +273,7 @@ fun SignUpScreen(navigateSignInScreen: () -> Unit) {
         )
 
         Button(
-            onClick = { },
+            onClick = { navigateMainScreen() },
             modifier = Modifier
                 .fillMaxWidth()
                 .height(provideDimension.dp52)

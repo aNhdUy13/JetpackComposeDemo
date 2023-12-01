@@ -13,4 +13,8 @@
     <string name="create">Create</string>
     <string name="input_username">Username</string>
     <string name="input_email_id">Email ID</string>
+    <string name="profile_screen">Profile Screen</string>
+    <string name="message_screen">Message Screen</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="task_screen">Task Screen</string>
 </resources>

@@ -7,8 +7,13 @@ open class Screens(val route: String, @StringRes val resourceId: Int) {
     object Splash : Screens("Splash", R.string.app_name)
     object Login : Screens("Login", R.string.app_name)
     object SignUp : Screens("SignUp", R.string.app_name)
+    object Main : Screens("Main", R.string.app_name)
     object Home : Screens("Home", R.string.app_name)
     object Task : Screens("Task", R.string.app_name)
+    object Chat : Screens("Chat", R.string.app_name)
+    object Profile : Screens("Profile", R.string.app_name)
+
+    object AddTask : Screens("AddTask", R.string.app_name)
     object CompletedTask : Screens("CompletedTask", R.string.app_name)
     object OnGoingTask : Screens("OnGoingTask", R.string.app_name)
     object PendingTask : Screens("PendingTask", R.string.app_name)

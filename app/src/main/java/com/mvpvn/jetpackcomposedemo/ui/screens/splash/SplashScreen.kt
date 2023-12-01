@@ -33,7 +33,7 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
 @Composable
 fun SplashScreen(
-    navigateHomeScreen: () -> Unit,
+    navigateMainScreen: () -> Unit,
     navigateLoginScreen: () -> Unit,
     navigateSignUpScreen: () -> Unit
 ) {
