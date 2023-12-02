@@ -17,4 +17,6 @@
     <string name="message_screen">Message Screen</string>
     <string name="home_screen">Home Screen</string>
     <string name="task_screen">Task Screen</string>
+    <string name="home_greeting">Hi, %s</string>
+    <string name="home_greeting_content">Lets make this day productive</string>
 </resources>

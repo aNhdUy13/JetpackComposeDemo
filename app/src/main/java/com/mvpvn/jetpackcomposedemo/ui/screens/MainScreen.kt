@@ -179,6 +179,7 @@ fun MainBottomNavItem(
         Image(
             painter = painterResource(id = R.drawable.ic_dot_selected),
             contentDescription = "",
+            modifier = Modifier.padding(top = providerDimension.dp5),
             alpha = if (isSelected) 1f else 0f
         )
     }
