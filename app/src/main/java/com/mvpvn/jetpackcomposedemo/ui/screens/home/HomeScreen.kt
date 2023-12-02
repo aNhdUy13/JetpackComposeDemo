@@ -2,22 +2,20 @@ package com.mvpvn.jetpackcomposedemo.ui.screens.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -28,6 +26,9 @@ import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.Dimensions
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
+import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.HeaderTitle
+import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.MyTask
+import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
@@ -42,10 +43,7 @@ fun HomeScreen() {
         val (homeHeader) = createRefs()
 
         HomeBody(
-            modifier = Modifier
-                .padding(horizontal = provideDimension.dp24)
-                .fillMaxSize(),
-            provideDimension = provideDimension
+            modifier = Modifier.fillMaxSize()
         )
 
         HomeHeader(
@@ -63,7 +61,14 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(color = colorResource(id = R.color.home_header))
+            .background(
+                brush = Brush.verticalGradient(
+                    colors = listOf(
+                        Color.White,
+                        Color.White.copy(alpha = 0f)
+                    )
+                )
+            )
 
     ) {
         ConstraintLayout(
@@ -71,6 +76,7 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
                 .padding(
                     start = provideDimension.dp24,
                     end = provideDimension.dp24,
+                    top = provideDimension.dp15,
                     bottom = provideDimension.dp10
                 )
                 .statusBarsPadding()
@@ -90,7 +96,7 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
                         end.linkTo(imagePerson.start)
                     },
                 color = colorResource(id = R.color.home_text_greeting),
-                fontSize = R.dimen.sp28.toSp(),
+                fontSize = R.dimen.dp30.toSp(),
                 textAlign = TextAlign.Left,
                 maxLines = 1,
                 style = textBold
@@ -129,114 +135,85 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
 }
 
 @Composable
-fun HomeBody(modifier: Modifier, provideDimension: Dimensions) {
+fun HomeBody(modifier: Modifier) {
+    val provideDimension = provideDimensions()
+    val homeItemList = homeUiList()
+
+    val secondItemPosition = 1
+    val thirdItemPosition = 2
+    val fourthItemPosition = 3
+
     LazyColumn(
         modifier = modifier
     ) {
+        itemsIndexed(homeItemList) { index, item ->
+            val itemModifier = when (index) {
+                secondItemPosition -> Modifier.padding(top = provideDimension.dp16)
+                thirdItemPosition -> Modifier.padding(top = provideDimension.dp22)
+                fourthItemPosition -> Modifier.padding(
+                    top = provideDimension.dp24,
+                    start = provideDimension.dp24,
+                    end = provideDimension.dp24
+                )
 
+                else -> Modifier.padding(
+                    top = provideDimension.dp10,
+                    start = provideDimension.dp24,
+                    end = provideDimension.dp24
+                )
+            }
+            when (item) {
+                is HeaderTitle -> {
+                    TitleItemView(
+                        headerTitle = item,
+                        modifier = if (index == thirdItemPosition) itemModifier else Modifier,
+                        onClickSubTitle = {})
+                }
+
+                is MyTask -> {
+                    MyTaskItemView(
+                        modifier = if (index == secondItemPosition) itemModifier else Modifier,
+                        onClickCompleteTask = {},
+                        onClickPendingTask = {},
+                        onClickCanceledTask = {},
+                        onClickOngoingTask = {}
+                    )
+                }
+
+                is Task -> {
+                    TodayTaskItemView(
+                        modifier = if (index == fourthItemPosition || index > fourthItemPosition) itemModifier else Modifier,
+                        homeTask = item,
+                        onClickTask = {
+
+                        },
+                        onClickMore = {
+
+                        }
+                    )
+                }
+            }
+        }
     }
 }
 
-@Composable
-fun TitleItemView(title: String, subTitle: String, onClickSubTitle: () -> Unit) {
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-        val (textTitle, textSubtitle) = createRefs()
-
-        Text(
-            text = title,
-            style = textBold,
-            fontSize = R.dimen.sp24.toSp(),
-            modifier = Modifier.constrainAs(textTitle) {
-                top.linkTo(parent.top)
-                start.linkTo(parent.start)
-            },
-            color = colorResource(id = R.color.home_text_greeting)
-        )
-
-        Text(
-            text = subTitle,
-            style = text,
-            fontSize = R.dimen.sp12.toSp(),
-            modifier = Modifier
-                .clickable { onClickSubTitle() }
-                .constrainAs(textSubtitle) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                },
-            color = colorResource(id = R.color.home_text_subtitle)
-        )
-    }
-}
-
-@Composable
-fun MyTaskItemView(text: String) {
-    ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
-        val provideDimension = provideDimensions()
-        val (imageCompletedTask, imagePendingTask, imageCanceledTask, imageOnGoingTask) = createRefs()
-
-        Image(
-            painter = painterResource(id = R.drawable.img_completed_task),
-            contentDescription = "",
-            modifier = Modifier
-                .constrainAs(imageCompletedTask) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                }
-        )
-
-        Image(
-            painter = painterResource(id = R.drawable.img_pending_task),
-            contentDescription = "",
-            modifier = Modifier
-                .constrainAs(imagePendingTask) {
-                    top.linkTo(parent.top)
-                    end.linkTo(parent.end)
-                }
-        )
-
-        Image(
-            painter = painterResource(id = R.drawable.img_canceled_task),
-            contentDescription = "",
-            modifier = Modifier
-                .constrainAs(imageCanceledTask) {
-                    top.linkTo(imageCompletedTask.bottom)
-                    start.linkTo(imageCompletedTask.start)
-                }
-        )
-
-        Image(
-            painter = painterResource(id = R.drawable.img_ongoing_task),
-            contentDescription = "",
-            modifier = Modifier
-                .constrainAs(imageOnGoingTask) {
-                    top.linkTo(imagePendingTask.bottom)
-                    end.linkTo(imagePendingTask.end)
-                }
-        )
-    }
-}
-
-@Composable
-fun TodayTaskItemView(text: String) {
-    val provideDimension = provideDimensions()
-
-    ConstraintLayout(
-        modifier = Modifier
-            .padding(provideDimension.dp15)
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(provideDimension.dp14)
-            )
-    ) {
-        val (divider) = createRefs()
-
-        Divider(
-            modifier = Modifier
-                .width(provideDimension.dp2)
-                .constrainAs(divider) {
-                    start.linkTo(parent.start)
-                    top.linkTo(parent.top)
-                }
-        )
-    }
+private fun homeUiList(): List<Any> {
+    return listOf(
+        HeaderTitle("My Task", "", true),
+        MyTask(""),
+        HeaderTitle("Today Task", "View all"),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList()),
+        Task("Header 2", "07:00", "07:15", emptyList())
+    )
 }

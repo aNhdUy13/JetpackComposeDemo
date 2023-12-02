@@ -24,10 +24,13 @@ fun provideDimensions() = Dimensions(
     dp14 = dimensionResource(id = R.dimen.dp14),
     dp15 = dimensionResource(id = R.dimen.dp15),
     dp16 = dimensionResource(id = R.dimen.dp16),
+    dp20 = dimensionResource(id = R.dimen.dp20),
+    dp22 = dimensionResource(id = R.dimen.dp22),
     dp24 = dimensionResource(id = R.dimen.dp24),
     dp29 = dimensionResource(id = R.dimen.dp29),
     dp30 = dimensionResource(id = R.dimen.dp30),
     dp32 = dimensionResource(id = R.dimen.dp32),
+    dp35 = dimensionResource(id = R.dimen.dp35),
     dp36 = dimensionResource(id = R.dimen.dp36),
     dp37 = dimensionResource(id = R.dimen.dp37),
     dp38 = dimensionResource(id = R.dimen.dp38),
@@ -43,7 +46,10 @@ fun provideDimensions() = Dimensions(
     dp76 = dimensionResource(id = R.dimen.dp76),
     dp90 = dimensionResource(id = R.dimen.dp90),
     dp95 = dimensionResource(id = R.dimen.dp95),
-    dp130 = dimensionResource(id = R.dimen.dp130)
+    dp130 = dimensionResource(id = R.dimen.dp130),
+    dp133 = dimensionResource(id = R.dimen.dp133),
+    dp145 = dimensionResource(id = R.dimen.dp145),
+    dp155 = dimensionResource(id = R.dimen.dp155)
 )
 
 data class Dimensions(
@@ -64,10 +70,13 @@ data class Dimensions(
     val dp14: Dp,
     val dp15: Dp,
     val dp16: Dp,
+    val dp20: Dp,
+    val dp22: Dp,
     val dp24: Dp,
     val dp29: Dp,
     val dp30: Dp,
     val dp32: Dp,
+    val dp35: Dp,
     val dp36: Dp,
     val dp37: Dp,
     val dp38: Dp,
@@ -83,5 +92,8 @@ data class Dimensions(
     val dp76: Dp,
     val dp90: Dp,
     val dp95: Dp,
-    val dp130: Dp
+    val dp130: Dp,
+    val dp133: Dp,
+    val dp145: Dp,
+    val dp155: Dp
 )
