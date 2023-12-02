@@ -7,6 +7,7 @@ import com.mvpvn.jetpackcomposedemo.R
 
 @Composable
 fun provideDimensions() = Dimensions(
+    dp0 = dimensionResource(id = R.dimen.dp0),
     dp1 = dimensionResource(id = R.dimen.dp1),
     dp2 = dimensionResource(id = R.dimen.dp2),
     dp3 = dimensionResource(id = R.dimen.dp3),
@@ -23,12 +24,15 @@ fun provideDimensions() = Dimensions(
     dp14 = dimensionResource(id = R.dimen.dp14),
     dp15 = dimensionResource(id = R.dimen.dp15),
     dp16 = dimensionResource(id = R.dimen.dp16),
+    dp24 = dimensionResource(id = R.dimen.dp24),
     dp29 = dimensionResource(id = R.dimen.dp29),
     dp30 = dimensionResource(id = R.dimen.dp30),
     dp32 = dimensionResource(id = R.dimen.dp32),
     dp36 = dimensionResource(id = R.dimen.dp36),
+    dp37 = dimensionResource(id = R.dimen.dp37),
     dp38 = dimensionResource(id = R.dimen.dp38),
     dp45 = dimensionResource(id = R.dimen.dp45),
+    dp50 = dimensionResource(id = R.dimen.dp50),
     dp52 = dimensionResource(id = R.dimen.dp52),
     dp55 = dimensionResource(id = R.dimen.dp55),
     dp58 = dimensionResource(id = R.dimen.dp58),
@@ -43,6 +47,7 @@ fun provideDimensions() = Dimensions(
 )
 
 data class Dimensions(
+    val dp0: Dp,
     val dp1: Dp,
     val dp2: Dp,
     val dp3: Dp,
@@ -59,12 +64,15 @@ data class Dimensions(
     val dp14: Dp,
     val dp15: Dp,
     val dp16: Dp,
+    val dp24: Dp,
     val dp29: Dp,
     val dp30: Dp,
     val dp32: Dp,
     val dp36: Dp,
+    val dp37: Dp,
     val dp38: Dp,
     val dp45: Dp,
+    val dp50: Dp,
     val dp52: Dp,
     val dp55: Dp,
     val dp58: Dp,
