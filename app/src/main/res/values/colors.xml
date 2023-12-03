@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="divider">#E3E8F1</color>
+    <color name="divider_task">#E8E9F3</color>
     <color name="text_hint">#C6CEDD</color>
     <color name="text_hint_2">#8A8BB3</color>
     <color name="splash_greeting">#2C406E</color>

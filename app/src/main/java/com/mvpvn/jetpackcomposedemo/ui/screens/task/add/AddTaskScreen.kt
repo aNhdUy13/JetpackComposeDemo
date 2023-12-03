@@ -1,6 +1,6 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task.add
 
-import androidx.compose.foundation.layout.Arrangement
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -28,8 +26,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
@@ -48,8 +44,8 @@ fun AddTaskScreen() {
     ) {
         val textTitleState = remember { mutableStateOf("Plan for a month") }
         val textDateState = remember { mutableStateOf("4 August 2021") }
-        val textStartTimeState = remember { mutableStateOf("") }
-        val textEndTimeState = remember { mutableStateOf("") }
+        val textStartTimeState = remember { mutableStateOf("07:00  AM") }
+        val textEndTimeState = remember { mutableStateOf("07:30  AM") }
         val textDescriptionState = remember { mutableStateOf("Creating this month's work plan") }
         val textTaskTypeState = remember { mutableIntStateOf(-1) }
 
@@ -62,9 +58,8 @@ fun AddTaskScreen() {
                 end = provideDimensions.dp36
             )
         )
-        AddTaskSimpleEdittext(
+        AddTaskSimpleTextField(
             textState = textTitleState,
-            textHint = "",
             modifier = Modifier.padding(horizontal = provideDimensions.dp36)
         )
         AddTaskTitle(
@@ -75,9 +70,8 @@ fun AddTaskScreen() {
                 end = provideDimensions.dp36
             )
         )
-        AddTaskSimpleEdittext(
+        AddTaskSimpleTextField(
             textState = textDateState,
-            textHint = "",
             modifier = Modifier.padding(horizontal = provideDimensions.dp36),
             isReadOnly = true,
             endIcon = R.drawable.ic_calendar
@@ -90,6 +84,26 @@ fun AddTaskScreen() {
                 end = provideDimensions.dp36
             )
         )
+        Row(
+            modifier = Modifier.padding(
+                start = provideDimensions.dp36,
+                end = provideDimensions.dp36
+            )
+        ) {
+            AddTaskSimpleTextField(
+                textState = textStartTimeState,
+                isTaskToCenter = true,
+                modifier = Modifier.weight(1f),
+                isReadOnly = true
+            )
+            Spacer(modifier = Modifier.width(provideDimensions.dp15))
+            AddTaskSimpleTextField(
+                textState = textEndTimeState,
+                isTaskToCenter = true,
+                modifier = Modifier.weight(1f),
+                isReadOnly = true
+            )
+        }
         AddTaskTitle(
             title = stringResource(id = R.string.description),
             modifier = Modifier.padding(
@@ -98,7 +112,7 @@ fun AddTaskScreen() {
                 end = provideDimensions.dp36
             )
         )
-        AddTaskSimpleEdittext(
+        AddTaskSimpleTextField(
             textState = textDescriptionState,
             textHint = "",
             modifier = Modifier.padding(horizontal = provideDimensions.dp36)
@@ -115,15 +129,16 @@ fun AddTaskScreen() {
 }
 
 @Composable
-fun AddTaskTag(){
+fun AddTaskTag() {
 
 }
 
 @Composable
-fun AddTaskSimpleEdittext(
+fun AddTaskSimpleTextField(
     textState: MutableState<String>,
-    textHint: String,
-    modifier: Modifier = Modifier,
+    textHint: String = "",
+    isTaskToCenter: Boolean = false,
+    @SuppressLint("ModifierParameter") modifier: Modifier = Modifier,
     isReadOnly: Boolean = false,
     isSingleLine: Boolean = true,
     startIcon: Int = -1,
@@ -148,8 +163,10 @@ fun AddTaskSimpleEdittext(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
-                            vertical = provideDimensions.dp15,
-                            horizontal = provideDimensions.dp3
+                            top = provideDimensions.dp15,
+                            bottom = provideDimensions.dp15,
+                            start = if (startIcon != -1) provideDimensions.dp3 else provideDimensions.dp0,
+                            end = if (endIcon != -1) provideDimensions.dp3 else provideDimensions.dp0
                         ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -162,11 +179,16 @@ fun AddTaskSimpleEdittext(
                         Spacer(modifier = Modifier.width(provideDimensions.dp15))
                     }
 
-                    Box(modifier = Modifier.weight(1f)) {
+                    Box(
+                        modifier = Modifier.weight(1f)
+                    ) {
                         innerTextField()
                         if (textState.value.isEmpty()) {
                             Text(
                                 text = textHint,
+                                modifier = if (isTaskToCenter) Modifier
+                                    .fillMaxWidth()
+                                    .align(Alignment.CenterStart) else Modifier,
                                 style = text.copy(
                                     color = colorResource(id = R.color.text_hint),
                                     fontSize = R.dimen.sp16.toSp()
@@ -187,7 +209,7 @@ fun AddTaskSimpleEdittext(
         )
 
         Divider(
-            color = colorResource(id = R.color.divider),
+            color = colorResource(id = R.color.divider_task),
             thickness = dimensionResource(id = R.dimen.dp1)
         )
     }
