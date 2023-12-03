@@ -28,14 +28,14 @@ import androidx.constraintlayout.compose.Dimension
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
-import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.HeaderTitle
+import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.HomeHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
 
 @Composable
-fun TitleItemView(headerTitle: HeaderTitle, modifier: Modifier, onClickSubTitle: () -> Unit) {
+fun TitleItemView(headerTitle: HomeHeaderTitle, modifier: Modifier, onClickSubTitle: () -> Unit) {
     ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val provideDimension = provideDimensions()
         val (textTitle, textSubtitle) = createRefs()

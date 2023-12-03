@@ -35,11 +35,9 @@ object TimeFormat {
     const val YYYYMM = "yyyyMM"
     const val YYYYMMDD = "yyyyMMdd"
     const val YYYY_MM_DD = "yyyy/MM/dd"
-    const val YYYY_MM_DD_2 = "yyyy-MM-dd"
     const val DD_MM_YYYY = "dd/MM/yyyy"
     const val DD_MM_YYYY_HH_MM = "dd/MM/yyyy HH:mm"
     const val YYYYMMDDHHMM = "yyyyMMddHHmm"
     const val YYYYMMDDHHMMSS = "yyyyMMddHHmmss"
-    const val YYYYMMDDHHMMSSSSS = "yyyyMMddHHmmssSSS"
     const val MM_DD_HH_MM = "MM/dd HH:mm"
 }

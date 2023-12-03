@@ -26,7 +26,7 @@ import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.Dimensions
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
-import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.HeaderTitle
+import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.HomeHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.MyTask
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
@@ -34,8 +34,6 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
 @Composable
 fun HomeScreen() {
-    val provideDimension = provideDimensions()
-
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -51,7 +49,7 @@ fun HomeScreen() {
                 .constrainAs(homeHeader) {
                     top.linkTo(parent.top)
                 },
-            provideDimension = provideDimension
+            provideDimension = provideDimensions()
         )
     }
 }
@@ -170,7 +168,7 @@ fun HomeBody(modifier: Modifier) {
                 )
             }
             when (item) {
-                is HeaderTitle -> {
+                is HomeHeaderTitle -> {
                     TitleItemView(
                         headerTitle = item,
                         modifier = if (index == thirdItemPosition) itemModifier else Modifier,
@@ -205,9 +203,9 @@ fun HomeBody(modifier: Modifier) {
 }
 
 private fun homeUiList() = arrayListOf<Any>().apply {
-    add(HeaderTitle("My Task", "", true))
+    add(HomeHeaderTitle("My Task", "", true))
     add(MyTask(""))
-    add(HeaderTitle("Today Task", "View all"))
+    add(HomeHeaderTitle("Today Task", "View all"))
 
     val taskList = mutableListOf<Any>()
     for (i in 1..10) {

@@ -10,6 +10,7 @@
 
     <color name="divider">#E3E8F1</color>
     <color name="divider_task">#E8E9F3</color>
+    <color name="hint_search">#CED0E7</color>
     <color name="text_hint">#C6CEDD</color>
     <color name="text_hint_2">#8A8BB3</color>
     <color name="splash_greeting">#2C406E</color>
@@ -38,4 +39,6 @@
 
     <color name="title_back_action_bar">#10275A</color>
     <color name="color_purple_white">#A8AEDF</color>
+    <color name="purple_search">#B0B5DD</color>
+    <color name="search_bg">#F6F6F6</color>
 </resources>

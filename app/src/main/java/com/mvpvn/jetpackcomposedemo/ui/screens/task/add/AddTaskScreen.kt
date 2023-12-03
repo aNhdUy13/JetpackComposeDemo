@@ -2,7 +2,9 @@ package com.mvpvn.jetpackcomposedemo.ui.screens.task.add
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -313,8 +315,16 @@ fun AddTaskSimpleTextField(
     iconColor: Color = colorResource(id = R.color.color_purple_white)
 ) {
     val provideDimensions = provideDimensions()
+    val interactionSource = remember { MutableInteractionSource() }
 
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+//            .clickable(
+//            interactionSource = interactionSource,
+//            indication = null,
+//            onClick = onClickTextField
+//        )
+    ) {
         BasicTextField(
             value = textState.value,
             onValueChange = { textState.value = it },
