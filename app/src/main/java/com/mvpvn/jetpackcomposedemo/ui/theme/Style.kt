@@ -21,3 +21,8 @@ val textBold = TextStyle(
     fontSize = 14.sp,
     fontWeight = FontWeight.Bold
 )
+
+val button = TextStyle(
+    fontSize = 14.sp,
+    fontWeight = FontWeight.Bold
+)

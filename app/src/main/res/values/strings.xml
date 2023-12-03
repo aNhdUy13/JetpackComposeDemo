@@ -25,4 +25,13 @@
     <string name="time">Time</string>
     <string name="description">Description</string>
     <string name="type">Type</string>
+    <string name="personal">Personal</string>
+    <string name="private_checkbox">Private</string>
+    <string name="secret">Secret</string>
+    <string name="tags">Tags</string>
+    <string name="office">Office</string>
+    <string name="home">Home</string>
+    <string name="urgent">Urgent</string>
+    <string name="work">Work</string>
+    <string name="add_new_tag">+ Add new tag</string>
 </resources>

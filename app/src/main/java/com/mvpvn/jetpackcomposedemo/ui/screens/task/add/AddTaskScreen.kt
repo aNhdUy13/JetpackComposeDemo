@@ -1,6 +1,9 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task.add
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +13,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,6 +33,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
@@ -41,6 +49,7 @@ fun AddTaskScreen() {
         modifier = Modifier
             .fillMaxSize()
             .systemBarsPadding()
+            .verticalScroll(rememberScrollState())
     ) {
         val textTitleState = remember { mutableStateOf("Plan for a month") }
         val textDateState = remember { mutableStateOf("4 August 2021") }
@@ -125,12 +134,162 @@ fun AddTaskScreen() {
                 end = provideDimensions.dp36
             )
         )
+        AddTaskType(
+            modifier = Modifier.padding(
+                horizontal = provideDimensions.dp22
+            )
+        )
+        AddTaskTitle(
+            title = stringResource(id = R.string.tags),
+            modifier = Modifier.padding(
+                top = provideDimensions.dp20,
+                start = provideDimensions.dp36,
+                end = provideDimensions.dp36
+            )
+        )
+        AddTaskTag(
+            modifier = Modifier.padding(
+                start = provideDimensions.dp24,
+                end = provideDimensions.dp24,
+                top = provideDimensions.dp16
+
+            )
+        )
+
+        Box(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = provideDimensions.dp24, vertical = provideDimensions.dp38)) {
+            Text(
+                text = stringResource(id = R.string.create),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(
+                        color = colorResource(id = R.color.button_color),
+                        shape = RoundedCornerShape(provideDimensions.dp14)
+                    )
+                    .padding(vertical = provideDimensions.dp14),
+                color = colorResource(id = R.color.white),
+                fontSize = R.dimen.sp18.toSp(),
+                textAlign = TextAlign.Center,
+                style = textBold
+            )
+        }
     }
 }
 
 @Composable
-fun AddTaskTag() {
+fun AddTaskTag(modifier: Modifier) {
+    Column(modifier = modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            TagItem(
+                stringResource(id = R.string.office),
+                colorResource(id = R.color.purple_text),
+                colorResource(id = R.color.purple_white)
+            )
+            TagItem(
+                stringResource(id = R.string.home),
+                colorResource(id = R.color.orange),
+                colorResource(id = R.color.yellow_white)
+            )
+            TagItem(
+                stringResource(id = R.string.urgent),
+                colorResource(id = R.color.pink_white),
+                colorResource(id = R.color.red_white_white)
+            )
+            TagItem(
+                stringResource(id = R.string.work),
+                colorResource(id = R.color.blue_text),
+                colorResource(id = R.color.blue_white)
+            )
+        }
 
+        Text(
+            text = stringResource(id = R.string.add_new_tag),
+            modifier = Modifier
+                .padding(top = provideDimensions().dp16)
+                .align(Alignment.CenterHorizontally),
+            color = colorResource(id = R.color.color_purple_white),
+            fontSize = R.dimen.sp12.toSp(),
+            style = text
+        )
+    }
+
+}
+
+@Composable
+fun TagItem(title: String, titleColor: Color, backgroundColor: Color) {
+    val provideDimensions = provideDimensions()
+    Text(
+        text = title,
+        modifier = Modifier
+            .background(
+                color = backgroundColor,
+                shape = RoundedCornerShape(provideDimensions.dp22)
+            )
+            .padding(horizontal = provideDimensions.dp20, vertical = provideDimensions.dp6),
+        color = titleColor,
+        fontSize = R.dimen.sp14.toSp(),
+        style = text
+    )
+}
+
+@Composable
+fun AddTaskType(modifier: Modifier) {
+    val (checkedStatePersonal, onCheckedChangePersonal) = remember { mutableStateOf(false) }
+    val (checkedStatePrivate, onCheckedChangePrivate) = remember { mutableStateOf(false) }
+    val (checkedStateSecret, onCheckedChangeSecret) = remember { mutableStateOf(false) }
+
+    val providerDimensions = provideDimensions()
+
+    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = checkedStatePersonal,
+                onCheckedChange = onCheckedChangePersonal,
+            )
+            Text(
+                text = stringResource(id = R.string.personal),
+                fontSize = R.dimen.sp16.toSp(),
+                style = text
+            )
+        }
+
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = checkedStatePrivate,
+                onCheckedChange = onCheckedChangePrivate
+            )
+            Text(
+                text = stringResource(id = R.string.private_checkbox),
+                fontSize = R.dimen.sp16.toSp(),
+                style = text
+            )
+        }
+
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = checkedStateSecret,
+                onCheckedChange = onCheckedChangeSecret
+            )
+            Text(
+                text = stringResource(id = R.string.secret),
+                fontSize = R.dimen.sp16.toSp(),
+                style = text
+            )
+        }
+    }
 }
 
 @Composable

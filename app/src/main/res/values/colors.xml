@@ -27,6 +27,14 @@
     <color name="red_white">#E88B8C</color>
     <color name="green">#81E89E</color>
     <color name="blue">#7DC8E7</color>
+    <color name="purple_white">#ECEAFF</color>
+    <color name="yellow_white">#FFEFEB</color>
+    <color name="red_white_white">#FFE9ED</color>
+    <color name="blue_white">#D1FEFF</color>
+    <color name="purple_text">#8F81FE</color>
+    <color name="orange">#F0A58E</color>
+    <color name="pink_white">#F57C96</color>
+    <color name="blue_text">#1EC1C3</color>
 
     <color name="title_back_action_bar">#10275A</color>
     <color name="color_purple_white">#A8AEDF</color>
