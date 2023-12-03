@@ -51,11 +51,11 @@ fun AddTaskScreen() {
             .systemBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
-        val textTitleState = remember { mutableStateOf("Plan for a month") }
-        val textDateState = remember { mutableStateOf("4 August 2021") }
+        val textTitleState = remember { mutableStateOf("") }
+        val textDateState = remember { mutableStateOf("4 December 2023") }
         val textStartTimeState = remember { mutableStateOf("07:00  AM") }
         val textEndTimeState = remember { mutableStateOf("07:30  AM") }
-        val textDescriptionState = remember { mutableStateOf("Creating this month's work plan") }
+        val textDescriptionState = remember { mutableStateOf("") }
         val textTaskTypeState = remember { mutableIntStateOf(-1) }
 
         BackActionBar(stringResource(id = R.string.add_task))
@@ -69,6 +69,7 @@ fun AddTaskScreen() {
         )
         AddTaskSimpleTextField(
             textState = textTitleState,
+            textHint = stringResource(id = R.string.hint_title_add_task),
             modifier = Modifier.padding(horizontal = provideDimensions.dp36)
         )
         AddTaskTitle(
@@ -123,7 +124,7 @@ fun AddTaskScreen() {
         )
         AddTaskSimpleTextField(
             textState = textDescriptionState,
-            textHint = "",
+            textHint = stringResource(id = R.string.hint_description_add_task),
             modifier = Modifier.padding(horizontal = provideDimensions.dp36)
         )
         AddTaskTitle(
