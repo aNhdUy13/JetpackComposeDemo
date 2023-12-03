@@ -40,6 +40,9 @@ import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.screens.base.BackActionBar
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
+import com.mvpvn.jetpackcomposedemo.utilities.TimeFormat
+import com.mvpvn.jetpackcomposedemo.utilities.getCurrentDate
+import com.mvpvn.jetpackcomposedemo.utilities.getCurrentTimeLater
 
 @Composable
 fun AddTaskScreen() {
@@ -51,10 +54,14 @@ fun AddTaskScreen() {
             .systemBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
+        val currentDate = getCurrentDate(TimeFormat.D_MMMM_YYYY)
+        val currentHour = getCurrentDate(TimeFormat.HH_mm_a)
+        val currentHourLater = getCurrentTimeLater()
+
         val textTitleState = remember { mutableStateOf("") }
-        val textDateState = remember { mutableStateOf("4 December 2023") }
-        val textStartTimeState = remember { mutableStateOf("07:00  AM") }
-        val textEndTimeState = remember { mutableStateOf("07:30  AM") }
+        val textDateState = remember { mutableStateOf(currentDate) }
+        val textStartTimeState = remember { mutableStateOf(currentHour) }
+        val textEndTimeState = remember { mutableStateOf(currentHourLater) }
         val textDescriptionState = remember { mutableStateOf("") }
         val textTaskTypeState = remember { mutableIntStateOf(-1) }
 
