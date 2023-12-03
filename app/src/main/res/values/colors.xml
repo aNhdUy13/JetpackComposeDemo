@@ -10,6 +10,7 @@
 
     <color name="divider">#E3E8F1</color>
     <color name="text_hint">#C6CEDD</color>
+    <color name="text_hint_2">#8A8BB3</color>
     <color name="splash_greeting">#2C406E</color>
     <color name="button_color">#5B67CA</color>
     <color name="dark_blue">#596685</color>
@@ -25,4 +26,7 @@
     <color name="red_white">#E88B8C</color>
     <color name="green">#81E89E</color>
     <color name="blue">#7DC8E7</color>
+
+    <color name="title_back_action_bar">#10275A</color>
+    <color name="color_purple_white">#A8AEDF</color>
 </resources>

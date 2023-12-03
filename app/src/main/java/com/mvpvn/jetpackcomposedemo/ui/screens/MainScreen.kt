@@ -137,7 +137,7 @@ fun ConstraintLayoutScope.MainBottomNavigationBar(
             Box(modifier = Modifier.weight(1f)) {
                 MainBottomNavItem(
                     index = TAB_CHAT,
-                    iconEnable = R.drawable.ic_home_enable,
+                    iconEnable = R.drawable.ic_chat_enable,
                     iconDisable = R.drawable.ic_chat_disable,
                     isSelected =  currentRoute == Screens.Chat.route
                 ) {
@@ -148,7 +148,7 @@ fun ConstraintLayoutScope.MainBottomNavigationBar(
             Box(modifier = Modifier.weight(1f)) {
                 MainBottomNavItem(
                     index = TAB_PROFILE,
-                    iconEnable = R.drawable.ic_home_enable,
+                    iconEnable = R.drawable.ic_profile_enable,
                     iconDisable = R.drawable.ic_profile_disable,
                     isSelected =  currentRoute == Screens.Profile.route
                 ) {

@@ -19,4 +19,10 @@
     <string name="task_screen">Task Screen</string>
     <string name="home_greeting">Hi, %s</string>
     <string name="home_greeting_content">Lets make this day productive</string>
+    <string name="add_task">Add Task</string>
+    <string name="title">Tittle</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="description">Description</string>
+    <string name="type">Type</string>
 </resources>

@@ -5,4 +5,5 @@ import org.koin.android.annotation.KoinViewModel
 
 @KoinViewModel
 class HomeViewModel() : ViewModel() {
+
 }
