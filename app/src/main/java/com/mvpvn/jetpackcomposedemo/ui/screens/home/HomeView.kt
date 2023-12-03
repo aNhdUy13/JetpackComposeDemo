@@ -4,7 +4,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,14 +18,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintLayoutScope
 import androidx.constraintlayout.compose.Dimension
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
@@ -43,7 +43,7 @@ fun TitleItemView(headerTitle: HeaderTitle, modifier: Modifier, onClickSubTitle:
         Text(
             text = headerTitle.title,
             style = textBold,
-            fontSize = R.dimen.sp26.toSp(),
+            fontSize = R.dimen.sp24.toSp(),
             modifier = Modifier
                 .constrainAs(textTitle) {
                     top.linkTo(
@@ -84,6 +84,7 @@ fun MyTaskItemView(
         val provideDimension = provideDimensions()
         val (dividerVerticalCenter) = createRefs()
         val (imageCompletedTask, imagePendingTask, imageCanceledTask, imageOnGoingTask) = createRefs()
+        val (imageMac, imageTime, imageFolder, imageClose) = createRefs()
         val interactionSource = remember { MutableInteractionSource() }
 
         Divider(
@@ -100,7 +101,6 @@ fun MyTaskItemView(
             painter = painterResource(id = R.drawable.img_completed_task),
             contentDescription = "",
             modifier = Modifier
-                .scale(1.0f)
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
@@ -111,9 +111,19 @@ fun MyTaskItemView(
                     start.linkTo(parent.start, margin = provideDimension.dp24)
                     end.linkTo(dividerVerticalCenter.start, margin = provideDimension.dp8)
                     width = Dimension.fillToConstraints
-                },
+                }
+        )
 
-            )
+        Image(
+            painter = painterResource(id = R.drawable.ic_imac),
+            contentDescription = "",
+            modifier = Modifier.constrainAs(imageMac) {
+                top.linkTo(imageCompletedTask.top, margin = provideDimension.dp10)
+                start.linkTo(imageCompletedTask.start, margin = provideDimension.dp14)
+            }
+        )
+
+        TextMyTask("Completed", "86 Task", imageMac)
 
         Image(
             painter = painterResource(id = R.drawable.img_canceled_task),
@@ -133,6 +143,18 @@ fun MyTaskItemView(
         )
 
         Image(
+            painter = painterResource(id = R.drawable.ic_close),
+            contentDescription = "",
+            modifier = Modifier.constrainAs(imageClose) {
+                top.linkTo(imageCanceledTask.top, margin = provideDimension.dp15)
+                start.linkTo(imageCanceledTask.start, margin = provideDimension.dp15)
+                width = Dimension.fillToConstraints
+            }
+        )
+
+        TextMyTask("Canceled", "15 Task", imageClose, R.color.white)
+
+        Image(
             painter = painterResource(id = R.drawable.img_pending_task),
             contentDescription = "",
             modifier = Modifier
@@ -150,6 +172,18 @@ fun MyTaskItemView(
         )
 
         Image(
+            painter = painterResource(id = R.drawable.ic_time),
+            contentDescription = "",
+            modifier = Modifier.constrainAs(imageTime) {
+                top.linkTo(imagePendingTask.top, margin = provideDimension.dp15)
+                start.linkTo(imagePendingTask.start, margin = provideDimension.dp15)
+                width = Dimension.fillToConstraints
+            }
+        )
+
+        TextMyTask("Pending", "15 Task", imageTime, R.color.white)
+
+        Image(
             painter = painterResource(id = R.drawable.img_ongoing_task),
             contentDescription = "",
             modifier = Modifier
@@ -165,13 +199,25 @@ fun MyTaskItemView(
                     width = Dimension.fillToConstraints
                 }
         )
+
+        Image(
+            painter = painterResource(id = R.drawable.ic_folder),
+            contentDescription = "",
+            modifier = Modifier.constrainAs(imageFolder) {
+                top.linkTo(imageOnGoingTask.top, margin = provideDimension.dp10)
+                start.linkTo(imageOnGoingTask.start, margin = provideDimension.dp14)
+                width = Dimension.fillToConstraints
+            }
+        )
+
+        this.TextMyTask("On Going", "67 Task", imageFolder)
     }
 }
 
 @Composable
 fun TodayTaskItemView(
     modifier: Modifier,
-    homeTask: Task,
+    task: Task,
     onClickTask: () -> Unit,
     onClickMore: () -> Unit
 ) {
@@ -181,48 +227,40 @@ fun TodayTaskItemView(
         modifier = modifier
             .clickable { onClickTask() }
             .fillMaxWidth()
-            .shadow(
-                elevation = provideDimension.dp14,
-                shape = RoundedCornerShape(provideDimension.dp14)
-            )
-            .background(
-                color = Color.White,
-                shape = RoundedCornerShape(provideDimension.dp14)
-            )
-            .padding(vertical = provideDimension.dp15, horizontal = provideDimension.dp22)
+            .padding(vertical = provideDimension.dp15, horizontal = provideDimension.dp15)
 
     ) {
         val (divider, taskTitle, taskTime, taskCategoryList, imageMore) = createRefs()
 
         Divider(
             modifier = Modifier
-                .background(colorResource(id = R.color.divider_purple))
                 .size(provideDimension.dp2, provideDimension.dp35)
                 .constrainAs(divider) {
-                    top.linkTo(parent.top)
+                    top.linkTo(parent.top, margin = provideDimension.dp5)
                     start.linkTo(parent.start)
-                }
+                },
+            color = colorResource(id = task.color)
         )
 
         Text(
-            text = homeTask.title,
+            text = task.title,
             style = textBold,
             fontSize = R.dimen.sp16.toSp(),
             modifier = Modifier
                 .constrainAs(taskTitle) {
-                    top.linkTo(divider.top)
+                    top.linkTo(parent.top)
                     start.linkTo(divider.end, margin = provideDimension.dp10)
                 },
             color = colorResource(id = R.color.splash_greeting)
         )
 
         Text(
-            text = "${homeTask.startTime} = ${homeTask.endTime}",
-            style = textBold,
+            text = "${task.startTime} = ${task.endTime}",
+            style = text,
             fontSize = R.dimen.sp14.toSp(),
             modifier = Modifier
                 .constrainAs(taskTime) {
-                    bottom.linkTo(divider.bottom)
+                    top.linkTo(taskTitle.bottom)
                     start.linkTo(taskTitle.start)
                 },
             color = colorResource(id = R.color.text_time)
@@ -234,16 +272,89 @@ fun TodayTaskItemView(
             modifier = Modifier
                 .clickable { onClickMore() }
                 .constrainAs(imageMore) {
-                    top.linkTo(parent.top)
+                    top.linkTo(divider.top)
                     end.linkTo(parent.end)
                 }
         )
 
-        Box(modifier = Modifier.constrainAs(taskCategoryList) {
-            top.linkTo(divider.bottom, margin = provideDimension.dp22)
-            start.linkTo(taskTime.start)
-        }) {
+        Row(
+            modifier =
+            Modifier
+                .constrainAs(taskCategoryList) {
+                    top.linkTo(divider.bottom, margin = provideDimension.dp22)
+                    start.linkTo(taskTime.start)
+                }
+        ) {
+            Text(
+                text = "Urgent",
+                modifier = Modifier
+                    .background(
+                        color = colorResource(id = R.color.divider),
+                        shape = RoundedCornerShape(provideDimension.dp2)
+                    )
+                    .padding(
+                        vertical = provideDimension.dp2,
+                        horizontal = provideDimension.dp7
+                    ),
+                fontSize = R.dimen.sp10.toSp(),
+                color = colorResource(id = R.color.divider_purple),
+                style = text
+            )
 
+            Spacer(modifier = Modifier.padding(provideDimension.dp6))
+
+            Text(
+                text = "Home",
+                modifier = Modifier
+                    .background(
+                        color = colorResource(id = R.color.divider),
+                        shape = RoundedCornerShape(provideDimension.dp2)
+                    )
+                    .padding(
+                        vertical = provideDimension.dp2,
+                        horizontal = provideDimension.dp7
+                    ),
+                fontSize = R.dimen.sp10.toSp(),
+                color = colorResource(id = R.color.divider_purple),
+                style = text
+            )
         }
+    }
+}
+
+
+@Composable
+fun ConstraintLayoutScope.TextMyTask(
+    title: String,
+    subTitle: String,
+    topImage: ConstrainedLayoutReference,
+    textColor: Int = R.color.home_text_greeting
+) {
+    val providerDimension = provideDimensions()
+    val textMyTask = createRef()
+
+    Column(modifier = Modifier.constrainAs(textMyTask) {
+        top.linkTo(topImage.bottom)
+        start.linkTo(topImage.start)
+    }) {
+        Text(
+            text = title,
+            modifier = Modifier.padding(
+                top = providerDimension.dp8
+            ),
+            color = colorResource(id = textColor),
+            fontSize = R.dimen.sp16.toSp(),
+            style = textBold
+        )
+
+        Text(
+            text = subTitle,
+            modifier = Modifier.padding(
+                top = providerDimension.dp5
+            ),
+            color = colorResource(id = textColor),
+            fontSize = R.dimen.sp14.toSp(),
+            style = text
+        )
     }
 }

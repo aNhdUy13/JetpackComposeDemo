@@ -96,7 +96,7 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
                         end.linkTo(imagePerson.start)
                     },
                 color = colorResource(id = R.color.home_text_greeting),
-                fontSize = R.dimen.dp30.toSp(),
+                fontSize = R.dimen.sp28.toSp(),
                 textAlign = TextAlign.Left,
                 maxLines = 1,
                 style = textBold
@@ -148,10 +148,17 @@ fun HomeBody(modifier: Modifier) {
     ) {
         itemsIndexed(homeItemList) { index, item ->
             val itemModifier = when (index) {
-                secondItemPosition -> Modifier.padding(top = provideDimension.dp16)
+                secondItemPosition -> Modifier.padding(top = provideDimension.dp14)
                 thirdItemPosition -> Modifier.padding(top = provideDimension.dp22)
                 fourthItemPosition -> Modifier.padding(
-                    top = provideDimension.dp24,
+                    top = provideDimension.dp20,
+                    start = provideDimension.dp24,
+                    end = provideDimension.dp24
+                )
+
+                homeItemList.size - 1 -> Modifier.padding(
+                    top = provideDimension.dp20,
+                    bottom = provideDimension.dp145,
                     start = provideDimension.dp24,
                     end = provideDimension.dp24
                 )
@@ -183,7 +190,7 @@ fun HomeBody(modifier: Modifier) {
                 is Task -> {
                     TodayTaskItemView(
                         modifier = if (index == fourthItemPosition || index > fourthItemPosition) itemModifier else Modifier,
-                        homeTask = item,
+                        task = item,
                         onClickTask = {
 
                         },
@@ -197,23 +204,29 @@ fun HomeBody(modifier: Modifier) {
     }
 }
 
-private fun homeUiList(): List<Any> {
-    return listOf(
-        HeaderTitle("My Task", "", true),
-        MyTask(""),
-        HeaderTitle("Today Task", "View all"),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList()),
-        Task("Header 2", "07:00", "07:15", emptyList())
-    )
+private fun homeUiList() = arrayListOf<Any>().apply {
+    add(HeaderTitle("My Task", "", true))
+    add(MyTask(""))
+    add(HeaderTitle("Today Task", "View all"))
+
+    val taskList = mutableListOf<Any>()
+    for (i in 1..10) {
+        taskList.add(
+            Task(
+                title = "Header $i",
+                startTime = "07:00",
+                endTime = "07:15",
+                categories = emptyList(),
+                color =
+                when (i) {
+                    1 -> R.color.divider_purple
+                    2 -> R.color.red_white
+                    3 -> R.color.green
+                    4 -> R.color.blue
+                    else -> R.color.divider_purple
+                }
+            )
+        )
+    }
+    addAll(taskList)
 }
