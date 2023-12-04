@@ -47,4 +47,5 @@
     <string name="sunday">Sunday</string>
     <string name="dont_have_schedule_or">"You don’t have any schedule   or   "</string>
     <string name="plush_add">+ Add</string>
+    <string name="empty_today_task">You dont have any schedule today.\nTap the plus button to create new to-do.</string>
 </resources>

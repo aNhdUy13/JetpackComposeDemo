@@ -34,6 +34,7 @@ import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.Dimensions
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
+import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.EmptyTask
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskDate
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskTimeline
@@ -157,7 +158,7 @@ fun TaskBody(taskViewModel: TaskViewModel, modifier: Modifier) {
     val provideDimension = provideDimensions()
     val taskUiState by taskViewModel.taskUiState.collectAsState()
 
-    val taskItemList = taskUiState.taskUiList()
+    val taskItemList = taskUiState.toUiList()
     val position3rd = 2
     val position4th = 3
     val lastPosition = taskItemList.size - 1
@@ -190,8 +191,8 @@ fun TaskBody(taskViewModel: TaskViewModel, modifier: Modifier) {
                         ),
                         taskDate = item,
                         selectedDate = taskUiState.selectedTaskDateState,
-                        onClickTaskDate = { selectedTaskDate ->
-                            taskViewModel.updateSelectedDate(selectedTaskDate)
+                        onClickTaskDate = { dateIndex, selectedTaskDate ->
+                            taskViewModel.updateSelectedDate(dateIndex, selectedTaskDate)
                         }
                     )
                 }
@@ -202,12 +203,14 @@ fun TaskBody(taskViewModel: TaskViewModel, modifier: Modifier) {
                         item = item
                     )
                 }
+
+                is EmptyTask -> EmptyTodayTask()
             }
         }
     }
 }
 
-private fun TaskState.taskUiList() = arrayListOf<Any>().apply {
+private fun TaskState.toUiList() = arrayListOf<Any>().apply {
     add(
         TaskHeaderTitle(
             title = "Task",
@@ -217,27 +220,10 @@ private fun TaskState.taskUiList() = arrayListOf<Any>().apply {
         )
     )
     add(TaskDate(dateList))
-    add(TaskHeaderTitle("Today", currentHour))
-    addAll(taskTimelineList)
-
-//    val taskList = mutableListOf<Any>()
-//    for (i in 1..10) {
-//        taskList.add(
-//            Task(
-//                title = "Task $i",
-//                startTime = "07:00",
-//                endTime = "07:15",
-//                categories = emptyList(),
-//                color =
-//                when (i) {
-//                    1 -> R.color.divider_purple
-//                    2 -> R.color.red_white
-//                    3 -> R.color.green
-//                    4 -> R.color.blue
-//                    else -> R.color.divider_purple
-//                }
-//            )
-//        )
-//    }
-//    addAll(taskList)
+    add(TaskHeaderTitle("Today", if (taskList.isNotEmpty()) currentHour else ""))
+    if (taskList.isNotEmpty()) {
+        addAll(timelineList)
+    } else {
+        add(EmptyTask())
+    }
 }

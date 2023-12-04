@@ -52,10 +52,13 @@ fun provideDimensions() = Dimensions(
     dp81 = dimensionResource(id = R.dimen.dp81),
     dp90 = dimensionResource(id = R.dimen.dp90),
     dp95 = dimensionResource(id = R.dimen.dp95),
+    dp100 = dimensionResource(id = R.dimen.dp100),
+    dp115 = dimensionResource(id = R.dimen.dp115),
     dp130 = dimensionResource(id = R.dimen.dp130),
     dp133 = dimensionResource(id = R.dimen.dp133),
     dp145 = dimensionResource(id = R.dimen.dp145),
-    dp155 = dimensionResource(id = R.dimen.dp155)
+    dp155 = dimensionResource(id = R.dimen.dp155),
+    dp190 = dimensionResource(id = R.dimen.dp190)
 )
 
 data class Dimensions(
@@ -104,8 +107,11 @@ data class Dimensions(
     val dp81: Dp,
     val dp90: Dp,
     val dp95: Dp,
+    val dp100: Dp,
+    val dp115: Dp,
     val dp130: Dp,
     val dp133: Dp,
     val dp145: Dp,
-    val dp155: Dp
+    val dp155: Dp,
+    val dp190: Dp
 )

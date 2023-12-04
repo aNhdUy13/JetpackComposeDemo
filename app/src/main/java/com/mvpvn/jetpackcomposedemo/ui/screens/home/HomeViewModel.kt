@@ -14,7 +14,7 @@ class HomeViewModel() : ViewModel() {
 
     init {
         val taskList = arrayListOf<Task>()
-        for (i in 1..10) {
+        for (i in 1..7) {
             taskList.add(
                 Task(
                     title = "Task $i",
