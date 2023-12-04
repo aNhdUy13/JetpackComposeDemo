@@ -1,5 +1,7 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task.pending
 
+import android.graphics.Color
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -7,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -18,12 +19,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.compose.ui.text.font.FontWeight
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
@@ -34,46 +33,52 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
 @Composable
-fun PendingTaskHeaderItemView(item: PendingTaskHeaderTitle) {
-
+fun PendingTaskHeaderItemView(item: PendingTaskHeaderTitle, modifier: Modifier) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.ic_calendar_pending_task),
+            contentDescription = "",
+            modifier = Modifier.padding(end = provideDimensions().dp10)
+        )
+        Text(
+            text = item.title,
+            fontSize = R.dimen.sp20.toSp(),
+            color = colorResource(id = R.color.black),
+            style = textBold.copy(
+                fontWeight = FontWeight(500)
+            )
+        )
+    }
 }
 
 @Composable
 fun PendingTaskSearchItemView(item: PendingTaskSearch, modifier: Modifier) {
-    Box(
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.White,
-                        Color.White.copy(alpha = 0f)
-                    )
-                )
-            )
-
+            .padding(top = provideDimensions().dp145)
     ) {
-        ConstraintLayout(
+        Row(
             modifier = Modifier
-                .statusBarsPadding()
                 .fillMaxWidth()
                 .padding(
                     start = provideDimensions().dp24,
-                    end = provideDimensions().dp24,
-                    top = provideDimensions().dp15,
-                    bottom = provideDimensions().dp10
+                    end = provideDimensions().dp15,
                 )
                 .background(
                     color = colorResource(id = R.color.search_bg),
                     shape = RoundedCornerShape(provideDimensions().dp15)
                 )
+                .weight(1f)
         ) {
             val textSearchState = remember { mutableStateOf("") }
 
             BasicTextField(
                 value = textSearchState.value,
                 onValueChange = { textSearchState.value = it },
-                modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 textStyle = textBold.copy(
                     color = colorResource(id = R.color.black),
@@ -82,7 +87,6 @@ fun PendingTaskSearchItemView(item: PendingTaskSearch, modifier: Modifier) {
                 decorationBox = { innerTextField ->
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
                             .padding(
                                 horizontal = provideDimensions().dp20,
                                 vertical = provideDimensions().dp15
@@ -94,7 +98,7 @@ fun PendingTaskSearchItemView(item: PendingTaskSearch, modifier: Modifier) {
                             contentDescription = "Search Icon",
                             tint = colorResource(id = R.color.purple_search)
                         )
-                        Spacer(modifier = androidx.compose.ui.Modifier.width(provideDimensions().dp15))
+                        Spacer(modifier = Modifier.width(provideDimensions().dp15))
                         Box(
                             modifier = Modifier.weight(1f)
                         ) {
@@ -122,7 +126,14 @@ fun PendingTaskSearchItemView(item: PendingTaskSearch, modifier: Modifier) {
                     }
                 }
             )
+
         }
+
+        Image(
+            painter = painterResource(id = R.drawable.ic_search_util),
+            contentDescription = "",
+            modifier = Modifier.padding(end = provideDimensions().dp24)
+        )
     }
 }
 

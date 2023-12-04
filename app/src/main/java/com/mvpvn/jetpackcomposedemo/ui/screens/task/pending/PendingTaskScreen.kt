@@ -47,17 +47,8 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
     ) {
         itemsIndexed(pendingTaskItemList) { index, item ->
             val itemModifier = when (index) {
-                secondItemPosition -> Modifier.padding(top = provideDimensions().dp14)
-                thirdItemPosition -> Modifier.padding(top = provideDimensions().dp22)
-                fourthItemPosition -> Modifier.padding(
-                    top = provideDimensions().dp20,
-                    start = provideDimensions().dp24,
-                    end = provideDimensions().dp24
-                )
-
-                pendingTaskItemList.size - 1 -> Modifier.padding(
-                    top = provideDimensions().dp20,
-                    bottom = provideDimensions().dp145,
+                secondItemPosition -> Modifier.padding(
+                    top = provideDimensions().dp23,
                     start = provideDimensions().dp24,
                     end = provideDimensions().dp24
                 )
@@ -69,7 +60,11 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
                 )
             }
             when (item) {
-                is PendingTaskHeaderTitle -> PendingTaskHeaderItemView(item)
+                is PendingTaskHeaderTitle -> PendingTaskHeaderItemView(
+                    item = item,
+                    modifier = if (index == secondItemPosition) itemModifier else Modifier
+                )
+
                 is PendingTaskSearch -> PendingTaskSearchItemView(item, Modifier)
                 is Task -> PendingTaskTimelineItemView(item)
 
@@ -80,6 +75,6 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
 
 private fun PendingTaskState.toUiList() = arrayListOf<Any>().apply {
     add(PendingTaskSearch())
-    add(PendingTaskHeaderTitle())
+    add(PendingTaskHeaderTitle("Dec 2023"))
     addAll(timelineList)
 }

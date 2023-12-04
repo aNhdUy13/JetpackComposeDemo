@@ -72,7 +72,7 @@ fun AddTaskScreen() {
         AddTaskTitle(
             title = stringResource(id = R.string.title),
             modifier = Modifier.padding(
-                top = provideDimensions.dp35,
+                top = provideDimensions.dp28,
                 start = provideDimensions.dp36,
                 end = provideDimensions.dp36
             )
