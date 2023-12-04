@@ -172,7 +172,8 @@ fun HomeBody(modifier: Modifier) {
                     TitleItemView(
                         headerTitle = item,
                         modifier = if (index == thirdItemPosition) itemModifier else Modifier,
-                        onClickSubTitle = {})
+                        onClickSubTitle = {}
+                    )
                 }
 
                 is MyTask -> {

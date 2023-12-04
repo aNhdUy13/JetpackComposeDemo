@@ -1,7 +1,17 @@
 package com.mvpvn.jetpackcomposedemo.utilities
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.res.stringResource
+import com.mvpvn.jetpackcomposedemo.R
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
+import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -23,7 +33,32 @@ fun getCurrentTimeLater(
     return dateFormat.format(calendar.time)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
+fun convertLocalDateToFormat(
+    localDate: LocalDate,
+    format: String = TimeFormat.YYYYMMDDHHMMSS
+): String {
+    val localDateTime = LocalDateTime.of(localDate, LocalDateTime.MIN.toLocalTime())
+    val formatter = DateTimeFormatter.ofPattern(format)
+    return localDateTime.format(formatter)
+}
+
+fun abbreviateDayOfWeek(context: Context, dayOfWeek: String): String {
+    val daysMap = mapOf(
+        context.getString(R.string.monday) to "MO",
+        context.getString(R.string.tuesday) to "TU",
+        context.getString(R.string.wednesday) to "WE",
+        context.getString(R.string.thursday) to "TH",
+        context.getString(R.string.friday) to "FR",
+        context.getString(R.string.saturday) to "SA",
+        context.getString(R.string.sunday) to "SU"
+    )
+
+    return daysMap[dayOfWeek] ?: "Unk"
+}
+
 object TimeFormat {
+    const val EEEE_D = "EEEE/d"
     const val D_MMMM_YYYY = "d MMMM yyyy"
     const val HH_h_mm_min = "HH h mm min"
     const val MMMM_YYYY = "MMMM yyyy"

@@ -1,6 +1,9 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,16 +33,14 @@ import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.Dimensions
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
-import com.mvpvn.jetpackcomposedemo.ui.screens.home.MyTaskItemView
-import com.mvpvn.jetpackcomposedemo.ui.screens.home.TitleItemView
-import com.mvpvn.jetpackcomposedemo.ui.screens.home.TodayTaskItemView
-import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.HomeHeaderTitle
-import com.mvpvn.jetpackcomposedemo.ui.screens.home.models.MyTask
+import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskDate
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
+import java.time.LocalDate
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskScreen() {
     ConstraintLayout(
@@ -134,10 +135,14 @@ fun TaskHeader(modifier: Modifier, provideDimensions: Dimensions) {
                             }
                         }
 
+                        val isSearchTextEmpty = textSearchState.value.isEmpty()
                         Icon(
-                            painter = painterResource(id = if (textSearchState.value.isEmpty()) R.drawable.ic_clear_search_disable else R.drawable.ic_clear_search_enable),
+                            painter = painterResource(id = if (isSearchTextEmpty) R.drawable.ic_clear_search_disable else R.drawable.ic_clear_search_enable),
                             contentDescription = "Delete Icon",
-                            tint = colorResource(id = if (textSearchState.value.isEmpty()) R.color.purple_search else R.color.purple_text)
+                            modifier = Modifier.clickable {
+                                if (!isSearchTextEmpty) textSearchState.value = ""
+                            },
+                            tint = colorResource(id = if (isSearchTextEmpty) R.color.purple_search else R.color.purple_text)
                         )
                     }
                 }
@@ -146,10 +151,14 @@ fun TaskHeader(modifier: Modifier, provideDimensions: Dimensions) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskBody(modifier: Modifier) {
     val provideDimension = provideDimensions()
-    val taskItemList = taskUiList()
+
+    val currentDate = LocalDate.now()
+    val dateList = (0 until 7).map { currentDate.plusDays(it.toLong()) }
+    val taskItemList = taskUiList(dateList)
 
     val secondItemPosition = 1
     val thirdItemPosition = 2
@@ -160,7 +169,7 @@ fun TaskBody(modifier: Modifier) {
     ) {
         itemsIndexed(taskItemList) { index, item ->
             val itemModifier = when (index) {
-                secondItemPosition -> Modifier.padding(top = provideDimension.dp14)
+                secondItemPosition -> Modifier.padding(top = provideDimension.dp14, start = provideDimension.dp32, end = provideDimension.dp32)
                 thirdItemPosition -> Modifier.padding(top = provideDimension.dp22)
                 fourthItemPosition -> Modifier.padding(
                     top = provideDimension.dp20,
@@ -183,21 +192,52 @@ fun TaskBody(modifier: Modifier) {
             }
             when (item) {
                 is TaskHeaderTitle -> {
+                    TitleItemView(
+                        taskHeaderTitle = item,
+                        modifier = if (index == thirdItemPosition) itemModifier else Modifier,
+                        onClickSubTitle = {}
+                    )
+                }
 
+                is TaskDate -> {
+                    TaskDateView(
+                        modifier = Modifier.padding(top = provideDimension.dp14, start = provideDimension.dp32, end = provideDimension.dp32),
+                        taskDate = item,
+                        onClickTaskDate = {
+
+                        }
+                    )
                 }
 
                 is Task -> {
+                    TaskItemView(
+                        modifier = if (index == fourthItemPosition || index > fourthItemPosition) itemModifier else Modifier,
+                        task = item,
+                        onClickTask = {
 
+                        },
+                        onClickMore = {
+
+                        }
+                    )
                 }
             }
+
         }
     }
 }
 
-private fun taskUiList() = arrayListOf<Any>().apply {
-    add(TaskHeaderTitle("Task", "", true))
-    add(MyTask(""))
-    add(TaskHeaderTitle("Today Task", "View all"))
+private fun taskUiList(dateList: List<LocalDate>) = arrayListOf<Any>().apply {
+    add(
+        TaskHeaderTitle(
+            title = "Task",
+            subTitle = "August 2021",
+            isFirstTitle = true,
+            isSubTitleContainIcon = true
+        )
+    )
+    add(TaskDate(dateList))
+    add(TaskHeaderTitle("Today", "09 h 45 min"))
 
     val taskList = mutableListOf<Any>()
     for (i in 1..10) {
