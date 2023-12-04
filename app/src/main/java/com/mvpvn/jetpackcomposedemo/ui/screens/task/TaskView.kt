@@ -258,13 +258,15 @@ fun TaskDateItem(
         Text(
             text = abbreviateDayOfWeek(context, dayOfWeek),
             fontSize = R.dimen.sp16.toSp(),
-            color = colorResource(id = if (isSelected) R.color.white else R.color.black)
+            color = colorResource(id = if (isSelected) R.color.white else R.color.title_back_action_bar),
+            style = textBold
         )
         Spacer(modifier = Modifier.height(provideDimensions().dp5))
         Text(
             text = dayNumber,
             fontSize = R.dimen.sp14.toSp(),
-            color = colorResource(id = if (isSelected) R.color.white else R.color.black)
+            color = colorResource(id = if (isSelected) R.color.white else R.color.title_back_action_bar),
+            style = text
         )
     }
 }

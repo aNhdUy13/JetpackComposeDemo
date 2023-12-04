@@ -205,9 +205,9 @@ fun TaskBody(modifier: Modifier) {
                 is TaskDate -> {
                     TaskDateView(
                         modifier = Modifier.padding(
-                            top = provideDimension.dp14,
-                            start = provideDimension.dp32,
-                            end = provideDimension.dp32
+                            top = provideDimension.dp7,
+                            start = provideDimension.dp28,
+                            end = provideDimension.dp28
                         ),
                         taskDate = item,
                         selectedDate = selectedTaskDateState.value,
