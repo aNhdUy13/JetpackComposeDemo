@@ -99,8 +99,11 @@ fun TaskDateView(
     taskDate: TaskDate,
     onClickTaskDate: (TaskDate) -> Unit
 ) {
-    LazyRow(modifier = modifier.fillMaxWidth()) {
-        items(taskDate.dateTimeList) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceEvenly
+    ) {
+        taskDate.dateTimeList.forEach {
             DateItem(date = it)
         }
     }
@@ -226,7 +229,10 @@ fun DateItem(date: LocalDate) {
 
     Column(
         modifier = Modifier
-            .size(provideDimensions().dp48, provideDimensions().dp71)
+            .size(
+                width = if (isSelected) provideDimensions().dp48 else provideDimensions().dp35,
+                height = provideDimensions().dp71
+            )
             .background(
                 color = colorResource(id = if (isSelected) R.color.button_color else R.color.white),
                 shape = RoundedCornerShape(provideDimensions().dp12)
