@@ -5,6 +5,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -23,30 +25,29 @@ fun BackActionBar(title: String) {
     val provideDimension = provideDimensions()
     val interactionSource = remember { MutableInteractionSource() }
 
-    Spacer(modifier = Modifier.padding(provideDimension.dp10))
     ConstraintLayout(
         modifier = Modifier
+            .systemBarsPadding()
             .fillMaxWidth()
             .padding(horizontal = provideDimension.dp36, vertical = provideDimension.dp10)
     ) {
-        val (imageBack, textTitle) = createRefs()
-
+        val (spacer, imageBack, textTitle) = createRefs()
+        Spacer(
+            modifier = Modifier
+                .size(provideDimension.dp60)
+                .constrainAs(spacer) {
+                    top.linkTo(parent.top)
+                }
+        )
         Image(
             painter = painterResource(id = R.drawable.ic_back),
             contentDescription = "",
-            modifier = Modifier
-//                .clickable(
-//                    interactionSource = interactionSource,
-//                    indication = null,
-//                    onClick = onBackPress
-//                )
-                .constrainAs(imageBack) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                }
+            modifier = Modifier.constrainAs(imageBack) {
+                top.linkTo(spacer.top)
+                bottom.linkTo(spacer.bottom)
+                start.linkTo(parent.start)
+            }
         )
-
         Text(
             text = title,
             modifier = Modifier.constrainAs(textTitle) {

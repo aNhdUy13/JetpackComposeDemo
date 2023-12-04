@@ -1,7 +1,9 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task.add
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,13 +13,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -29,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -164,9 +167,11 @@ fun AddTaskScreen() {
             )
         )
 
-        Box(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = provideDimensions.dp24, vertical = provideDimensions.dp38)) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = provideDimensions.dp24, vertical = provideDimensions.dp38)
+        ) {
             Text(
                 text = stringResource(id = R.string.create),
                 modifier = Modifier
@@ -250,17 +255,27 @@ fun AddTaskType(modifier: Modifier) {
     val (checkedStatePrivate, onCheckedChangePrivate) = remember { mutableStateOf(false) }
     val (checkedStateSecret, onCheckedChangeSecret) = remember { mutableStateOf(false) }
 
-    val providerDimensions = provideDimensions()
+    val checkedIcon = painterResource(id = R.drawable.ic_checked_type)
+    val uncheckedIcon = painterResource(id = R.drawable.ic_unchecked_type)
 
-    Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = provideDimensions().dp10),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Row(
             modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Checkbox(
+            TaskTypeCheckbox(
                 checked = checkedStatePersonal,
-                onCheckedChange = onCheckedChangePersonal,
+                checkedIcon = checkedIcon,
+                uncheckedIcon = uncheckedIcon,
+                onCheckedChange = onCheckedChangePersonal
             )
+            Spacer(modifier = Modifier.width(provideDimensions().dp5))
             Text(
                 text = stringResource(id = R.string.personal),
                 fontSize = R.dimen.sp16.toSp(),
@@ -270,12 +285,16 @@ fun AddTaskType(modifier: Modifier) {
 
         Row(
             modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Checkbox(
+            TaskTypeCheckbox(
                 checked = checkedStatePrivate,
+                checkedIcon = checkedIcon,
+                uncheckedIcon = uncheckedIcon,
                 onCheckedChange = onCheckedChangePrivate
             )
+            Spacer(modifier = Modifier.width(provideDimensions().dp5))
             Text(
                 text = stringResource(id = R.string.private_checkbox),
                 fontSize = R.dimen.sp16.toSp(),
@@ -285,12 +304,16 @@ fun AddTaskType(modifier: Modifier) {
 
         Row(
             modifier = Modifier.weight(1f),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Checkbox(
+            TaskTypeCheckbox(
                 checked = checkedStateSecret,
+                checkedIcon = checkedIcon,
+                uncheckedIcon = uncheckedIcon,
                 onCheckedChange = onCheckedChangeSecret
             )
+            Spacer(modifier = Modifier.width(provideDimensions().dp5))
             Text(
                 text = stringResource(id = R.string.secret),
                 fontSize = R.dimen.sp16.toSp(),
@@ -400,5 +423,28 @@ fun AddTaskTitle(title: String, modifier: Modifier) {
         style = text.copy(
             fontSize = R.dimen.sp14.toSp()
         )
+    )
+}
+
+@Composable
+fun TaskTypeCheckbox(
+    checked: Boolean,
+    checkedIcon: Painter,
+    uncheckedIcon: Painter,
+    onCheckedChange: ((Boolean) -> Unit)?,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    Image(
+        painter = if (checked) checkedIcon else uncheckedIcon,
+        contentDescription = "",
+        modifier = Modifier
+            .size(provideDimensions().dp18)
+            .padding(top = provideDimensions().dp1)
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                onCheckedChange?.invoke(!checked)
+            }
     )
 }

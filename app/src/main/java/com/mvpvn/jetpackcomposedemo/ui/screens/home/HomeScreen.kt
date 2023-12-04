@@ -36,17 +36,20 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    onClickPendingTask: () -> Unit
+) {
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
 
         val (homeHeader) = createRefs()
-        val taskViewModel: HomeViewModel = viewModel()
+        val viewModel: HomeViewModel = viewModel()
 
         HomeBody(
-            taskViewModel = taskViewModel,
-            modifier = Modifier.fillMaxSize()
+            viewModel = viewModel,
+            modifier = Modifier.fillMaxSize(),
+            onClickPendingTask = onClickPendingTask
         )
 
         HomeHeader(
@@ -60,7 +63,7 @@ fun HomeScreen() {
 }
 
 @Composable
-fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
+private fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
     Box(
         modifier = modifier
             .fillMaxWidth()
@@ -138,9 +141,13 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
 }
 
 @Composable
-fun HomeBody(taskViewModel: HomeViewModel, modifier: Modifier) {
+private fun HomeBody(
+    viewModel: HomeViewModel,
+    modifier: Modifier,
+    onClickPendingTask: () -> Unit
+) {
     val provideDimension = provideDimensions()
-    val homeUiState by taskViewModel.homeUiState.collectAsState()
+    val homeUiState by viewModel.homeUiState.collectAsState()
 
     val homeItemList = homeUiState.homeUiList()
     val secondItemPosition = 1
@@ -186,10 +193,10 @@ fun HomeBody(taskViewModel: HomeViewModel, modifier: Modifier) {
                 is MyTask -> {
                     MyTaskItemView(
                         modifier = if (index == secondItemPosition) itemModifier else Modifier,
-                        onClickCompleteTask = {},
-                        onClickPendingTask = {},
-                        onClickCanceledTask = {},
-                        onClickOngoingTask = {}
+                        onClickCompleteTask = onClickPendingTask,
+                        onClickPendingTask = onClickPendingTask,
+                        onClickCanceledTask = onClickPendingTask,
+                        onClickOngoingTask = onClickPendingTask
                     )
                 }
 

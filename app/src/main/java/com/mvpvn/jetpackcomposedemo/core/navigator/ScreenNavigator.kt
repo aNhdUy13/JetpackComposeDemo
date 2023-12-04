@@ -67,7 +67,8 @@ fun AppScreenNavigator() {
                 exitTransition = { slideOutTransition(-1000) }
             ) {
                 MainScreen(
-                    switchTabAddTask = { navController.navigate(Screens.AddTask.route) }
+                    switchTabAddTask = { navController.navigate(Screens.AddTask.route) },
+                    onClickPendingTask = { navController.navigate(Screens.PendingTask.route) }
                 )
             }
 
@@ -88,8 +89,8 @@ fun AppScreenNavigator() {
             }
             composable(
                 route = Screens.AddTask.route,
-                enterTransition = { slideInTransition(1000) },
-                exitTransition = { slideOutTransition(-1000) }
+//                enterTransition = { slideInTransition(1000) },
+//                exitTransition = { slideOutTransition(-1000) }
             ) {
                 AddTaskScreen()
             }
@@ -98,13 +99,19 @@ fun AppScreenNavigator() {
 }
 
 @Composable
-fun MainScreenNavigator(navController: NavHostController, currentRoute: String) {
+fun MainScreenNavigator(
+    navController: NavHostController,
+    currentRoute: String,
+    onClickPendingTask: () -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = currentRoute
     ) {
         composable(route = Screens.Home.route) {
-            HomeScreen()
+            HomeScreen(
+                onClickPendingTask = onClickPendingTask
+            )
         }
 
         composable(route = Screens.Task.route) {

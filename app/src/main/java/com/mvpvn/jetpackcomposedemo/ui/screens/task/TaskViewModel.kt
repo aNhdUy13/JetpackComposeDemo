@@ -7,6 +7,7 @@ import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskTimeline
 import com.mvpvn.jetpackcomposedemo.utilities.TimeFormat
 import com.mvpvn.jetpackcomposedemo.utilities.getCurrentDate
+import com.mvpvn.jetpackcomposedemo.utilities.getRangeOfHour
 import kotlinx.coroutines.flow.update
 import org.koin.android.annotation.KoinViewModel
 import org.threeten.bp.LocalDate
@@ -44,12 +45,6 @@ class TaskViewModel() : ViewModel() {
                 selectedTaskDateState = date,
                 taskList = if (dateIndex % 2 == 1 || dateIndex == 2) emptyList() else getTaskList()
             )
-        }
-    }
-
-    private fun getRangeOfHour(): List<String> {
-        return (0..23).map { hour ->
-            String.format("%02d:00", hour)
         }
     }
 

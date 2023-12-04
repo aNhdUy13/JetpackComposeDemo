@@ -54,7 +54,26 @@ fun abbreviateDayOfWeek(context: Context, dayOfWeek: String): String {
     return daysMap[dayOfWeek] ?: "Unk"
 }
 
+fun getFormattedDatesOfMonth(): List<String> {
+    val dateFormatter = DateTimeFormatter.ofPattern(TimeFormat.DD_EEEE_YYYY, Locale.getDefault())
+    val currentDate = LocalDate.now()
+
+    val startOfMonth = currentDate.withDayOfMonth(1)
+    val endOfMonth = currentDate.withDayOfMonth(currentDate.lengthOfMonth())
+
+    return (startOfMonth.dayOfMonth..endOfMonth.dayOfMonth).map { dayOfMonth ->
+        startOfMonth.withDayOfMonth(dayOfMonth).format(dateFormatter)
+    }
+}
+
+fun getRangeOfHour(): List<String> {
+    return (0..23).map { hour ->
+        String.format("%02d:00", hour)
+    }
+}
+
 object TimeFormat {
+    const val DD_EEEE_YYYY = "dd EEEE yyyy"
     const val EEEE_D = "EEEE/d"
     const val D_MMMM_YYYY = "d MMMM yyyy"
     const val MMMM_YYYY = "MMMM yyyy"

@@ -42,7 +42,10 @@ const val TAB_CHAT = 2
 const val TAB_PROFILE = 3
 
 @Composable
-fun MainScreen(switchTabAddTask: () -> Unit) {
+fun MainScreen(
+    switchTabAddTask: () -> Unit,
+    onClickPendingTask: () -> Unit
+) {
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -52,7 +55,8 @@ fun MainScreen(switchTabAddTask: () -> Unit) {
             switchTab = { _, route ->
                 navController.switchTab(route)
             },
-            switchTabAddTask = switchTabAddTask
+            switchTabAddTask = switchTabAddTask,
+            onClickPendingTask = onClickPendingTask
         )
     }
 }
@@ -63,6 +67,7 @@ fun ConstraintLayoutScope.MainBottomNavigationBar(
     navController: NavHostController,
     switchTab: (Int, String) -> Unit,
     switchTabAddTask: () -> Unit,
+    onClickPendingTask: () -> Unit
 ) {
     val provideDimension = provideDimensions()
     val bottomNavigation = createRef()
@@ -71,7 +76,7 @@ fun ConstraintLayoutScope.MainBottomNavigationBar(
 
     val interactionSource = remember { MutableInteractionSource() }
 
-    MainScreenNavigator(navController, currentRoute)
+    MainScreenNavigator(navController, currentRoute, onClickPendingTask)
     Row(
         modifier = Modifier
             .padding(horizontal = provideDimension.dp24)
@@ -139,7 +144,7 @@ fun ConstraintLayoutScope.MainBottomNavigationBar(
                     index = TAB_CHAT,
                     iconEnable = R.drawable.ic_chat_enable,
                     iconDisable = R.drawable.ic_chat_disable,
-                    isSelected =  currentRoute == Screens.Chat.route
+                    isSelected = currentRoute == Screens.Chat.route
                 ) {
                     switchTab(TAB_CHAT, Screens.Chat.route)
                 }
@@ -150,7 +155,7 @@ fun ConstraintLayoutScope.MainBottomNavigationBar(
                     index = TAB_PROFILE,
                     iconEnable = R.drawable.ic_profile_enable,
                     iconDisable = R.drawable.ic_profile_disable,
-                    isSelected =  currentRoute == Screens.Profile.route
+                    isSelected = currentRoute == Screens.Profile.route
                 ) {
                     switchTab(TAB_PROFILE, Screens.Profile.route)
                 }
