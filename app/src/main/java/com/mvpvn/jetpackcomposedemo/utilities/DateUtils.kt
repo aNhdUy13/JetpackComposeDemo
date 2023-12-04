@@ -4,25 +4,22 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.ui.res.stringResource
 import com.mvpvn.jetpackcomposedemo.R
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
 @SuppressLint("SimpleDateFormat")
-fun getCurrentDate(timeFormat: String = TimeFormat.HH_h_mm_min): String {
+fun getCurrentDate(timeFormat: String = TimeFormat.HH_MM): String {
     return SimpleDateFormat(timeFormat).format(Date())
 }
 
 fun getCurrentTimeLater(
-    timeFormat: String = TimeFormat.HH_mm_a,
+    timeFormat: String = TimeFormat.HH_MM_a,
     minuteLater: Int = 30
 ): String {
     val correctMinuteLater = if (minuteLater <= 0) 30 else minuteLater
@@ -60,9 +57,9 @@ fun abbreviateDayOfWeek(context: Context, dayOfWeek: String): String {
 object TimeFormat {
     const val EEEE_D = "EEEE/d"
     const val D_MMMM_YYYY = "d MMMM yyyy"
-    const val HH_h_mm_min = "HH h mm min"
     const val MMMM_YYYY = "MMMM yyyy"
-    const val HH_mm_a = "HH:mm a"
+    const val HH_MM_a = "HH:mm a"
+    const val HH_MM = "HH:mm"
     const val MM_DD = "MM/dd"
     const val DD_MM = "dd/MM"
     const val MM_YYYY = "MM/yyyy"

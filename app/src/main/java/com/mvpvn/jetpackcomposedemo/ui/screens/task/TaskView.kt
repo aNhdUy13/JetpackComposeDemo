@@ -29,6 +29,7 @@ import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskDate
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskHeaderTitle
+import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskTimeline
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 import com.mvpvn.jetpackcomposedemo.utilities.TimeFormat
@@ -91,7 +92,7 @@ fun TitleItemView(
 }
 
 @Composable
-fun TaskDateView(
+fun TaskDateItemView(
     modifier: Modifier,
     taskDate: TaskDate,
     selectedDate: LocalDate,
@@ -104,7 +105,7 @@ fun TaskDateView(
         val interactionSource = remember { MutableInteractionSource() }
 
         taskDate.dateTimeList.forEach {
-            TaskDateItem(
+            TaskDateChildItemView(
                 date = it,
                 isSelected = selectedDate == it,
                 interactionSource = interactionSource
@@ -113,6 +114,11 @@ fun TaskDateView(
             }
         }
     }
+}
+
+@Composable
+fun TaskTimelineItemView(item: TaskTimeline) {
+
 }
 
 @Composable
@@ -225,7 +231,7 @@ fun TaskItemView(
 
 
 @Composable
-fun TaskDateItem(
+private fun TaskDateChildItemView(
     date: LocalDate,
     isSelected: Boolean,
     interactionSource: MutableInteractionSource,

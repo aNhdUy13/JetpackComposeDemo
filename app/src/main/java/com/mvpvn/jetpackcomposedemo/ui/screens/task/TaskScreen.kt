@@ -34,8 +34,11 @@ import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskDate
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskHeaderTitle
+import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskTimeline
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
+import com.mvpvn.jetpackcomposedemo.utilities.TimeFormat
+import com.mvpvn.jetpackcomposedemo.utilities.getCurrentDate
 import org.threeten.bp.LocalDate
 
 @Composable
@@ -151,12 +154,18 @@ fun TaskHeader(modifier: Modifier, provideDimensions: Dimensions) {
 @Composable
 fun TaskBody(modifier: Modifier) {
     val provideDimension = provideDimensions()
-
     val selectedTaskDateState = remember { mutableStateOf(LocalDate.now()) }
 
     val currentDate = LocalDate.now()
+    val currentMonthYear = getCurrentDate(TimeFormat.MMMM_YYYY)
+    val dividedHour = getCurrentDate().split(":")
+    val currentHour = "${dividedHour[0]} h ${dividedHour[1]} min"
     val dateList = (0 until 7).map { currentDate.plusDays(it.toLong()) }
-    val taskItemList = taskUiList(dateList)
+    val timelineList = getRangeOfHour().map {
+        TaskTimeline(it)
+    }
+
+    val taskItemList = taskUiList(dateList, timelineList, currentMonthYear, currentHour)
 
     val secondItemPosition = 1
     val thirdItemPosition = 2
@@ -203,7 +212,7 @@ fun TaskBody(modifier: Modifier) {
                 }
 
                 is TaskDate -> {
-                    TaskDateView(
+                    TaskDateItemView(
                         modifier = Modifier.padding(
                             top = provideDimension.dp7,
                             start = provideDimension.dp28,
@@ -217,6 +226,9 @@ fun TaskBody(modifier: Modifier) {
                     )
                 }
 
+                is TaskTimeline -> {
+                    TaskTimelineItemView(item)
+                }
                 is Task -> {
                     TaskItemView(
                         modifier = if (index == fourthItemPosition || index > fourthItemPosition) itemModifier else Modifier,
@@ -235,17 +247,29 @@ fun TaskBody(modifier: Modifier) {
     }
 }
 
-private fun taskUiList(dateList: List<LocalDate>) = arrayListOf<Any>().apply {
+private fun getRangeOfHour(): List<String> {
+    return (0..23).map { hour ->
+        String.format("%02d:00", hour)
+    }
+}
+
+private fun taskUiList(
+    dateList: List<LocalDate>,
+    timeList: List<TaskTimeline>,
+    currentMonthYear: String,
+    currentHour: String
+) = arrayListOf<Any>().apply {
     add(
         TaskHeaderTitle(
             title = "Task",
-            subTitle = "August 2021",
+            subTitle = currentMonthYear,
             isFirstTitle = true,
             isSubTitleContainIcon = true
         )
     )
     add(TaskDate(dateList))
-    add(TaskHeaderTitle("Today", "09 h 45 min"))
+    add(TaskHeaderTitle("Today", currentHour))
+    addAll(timeList)
 
     val taskList = mutableListOf<Any>()
     for (i in 1..10) {

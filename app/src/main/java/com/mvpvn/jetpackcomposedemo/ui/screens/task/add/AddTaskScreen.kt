@@ -2,8 +2,6 @@ package com.mvpvn.jetpackcomposedemo.ui.screens.task.add
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -57,7 +55,7 @@ fun AddTaskScreen() {
             .verticalScroll(rememberScrollState())
     ) {
         val currentDate = getCurrentDate(TimeFormat.D_MMMM_YYYY)
-        val currentHour = getCurrentDate(TimeFormat.HH_mm_a)
+        val currentHour = getCurrentDate(TimeFormat.HH_MM_a)
         val currentHourLater = getCurrentTimeLater()
 
         val textTitleState = remember { mutableStateOf("") }

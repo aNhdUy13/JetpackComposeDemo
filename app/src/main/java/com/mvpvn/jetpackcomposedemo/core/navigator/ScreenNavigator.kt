@@ -135,7 +135,7 @@ fun NavHostController.navigateFirstScreen() {
 }
 
 fun NavHostController.switchTab(route: String) {
-    val startDestination = this.graph.findStartDestination().id
+    val startDestination = graph.findStartDestination().id
     navigate(route) {
         popUpTo(startDestination) {
             saveState = true
