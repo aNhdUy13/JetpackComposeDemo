@@ -1,7 +1,5 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -38,9 +36,8 @@ import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
-import java.time.LocalDate
+import org.threeten.bp.LocalDate
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskScreen() {
     ConstraintLayout(
@@ -151,10 +148,11 @@ fun TaskHeader(modifier: Modifier, provideDimensions: Dimensions) {
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskBody(modifier: Modifier) {
     val provideDimension = provideDimensions()
+
+    val selectedTaskDateState = remember { mutableStateOf(LocalDate.now()) }
 
     val currentDate = LocalDate.now()
     val dateList = (0 until 7).map { currentDate.plusDays(it.toLong()) }
@@ -169,7 +167,12 @@ fun TaskBody(modifier: Modifier) {
     ) {
         itemsIndexed(taskItemList) { index, item ->
             val itemModifier = when (index) {
-                secondItemPosition -> Modifier.padding(top = provideDimension.dp14, start = provideDimension.dp32, end = provideDimension.dp32)
+                secondItemPosition -> Modifier.padding(
+                    top = provideDimension.dp14,
+                    start = provideDimension.dp32,
+                    end = provideDimension.dp32
+                )
+
                 thirdItemPosition -> Modifier.padding(top = provideDimension.dp22)
                 fourthItemPosition -> Modifier.padding(
                     top = provideDimension.dp20,
@@ -201,10 +204,15 @@ fun TaskBody(modifier: Modifier) {
 
                 is TaskDate -> {
                     TaskDateView(
-                        modifier = Modifier.padding(top = provideDimension.dp14, start = provideDimension.dp32, end = provideDimension.dp32),
+                        modifier = Modifier.padding(
+                            top = provideDimension.dp14,
+                            start = provideDimension.dp32,
+                            end = provideDimension.dp32
+                        ),
                         taskDate = item,
-                        onClickTaskDate = {
-
+                        selectedDate = selectedTaskDateState.value,
+                        onClickTaskDate = { selectedTaskDate ->
+                            selectedTaskDateState.value = selectedTaskDate
                         }
                     )
                 }
@@ -243,7 +251,7 @@ private fun taskUiList(dateList: List<LocalDate>) = arrayListOf<Any>().apply {
     for (i in 1..10) {
         taskList.add(
             Task(
-                title = "Header $i",
+                title = "Task $i",
                 startTime = "07:00",
                 endTime = "07:15",
                 categories = emptyList(),

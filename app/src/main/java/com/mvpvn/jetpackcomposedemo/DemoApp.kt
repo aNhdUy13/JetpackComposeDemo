@@ -1,6 +1,7 @@
 package com.mvpvn.jetpackcomposedemo
 
 import android.app.Application
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.mvpvn.jetpackcomposedemo.di.DI
 
 class DemoApp : Application() {
@@ -9,5 +10,6 @@ class DemoApp : Application() {
         super.onCreate()
 
         DI.initialize(this)
+        AndroidThreeTen.init(this)
     }
 }

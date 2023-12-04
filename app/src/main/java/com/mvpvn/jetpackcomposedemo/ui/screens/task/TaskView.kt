@@ -1,10 +1,9 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,12 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -35,8 +33,8 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 import com.mvpvn.jetpackcomposedemo.utilities.TimeFormat
 import com.mvpvn.jetpackcomposedemo.utilities.abbreviateDayOfWeek
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import org.threeten.bp.LocalDate
+import org.threeten.bp.format.DateTimeFormatter
 
 @Composable
 fun TitleItemView(
@@ -92,19 +90,27 @@ fun TitleItemView(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TaskDateView(
     modifier: Modifier,
     taskDate: TaskDate,
-    onClickTaskDate: (TaskDate) -> Unit
+    selectedDate: LocalDate,
+    onClickTaskDate: (LocalDate) -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
+        val interactionSource = remember { MutableInteractionSource() }
+
         taskDate.dateTimeList.forEach {
-            DateItem(date = it)
+            TaskDateItem(
+                date = it,
+                isSelected = selectedDate == it,
+                interactionSource = interactionSource
+            ) { selectedLocalDate ->
+                onClickTaskDate(selectedLocalDate)
+            }
         }
     }
 }
@@ -218,19 +224,28 @@ fun TaskItemView(
 }
 
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun DateItem(date: LocalDate) {
+fun TaskDateItem(
+    date: LocalDate,
+    isSelected: Boolean,
+    interactionSource: MutableInteractionSource,
+    onClickTaskDate: (LocalDate) -> Unit
+) {
     val context = LocalContext.current
     val formattedDate = date.format(DateTimeFormatter.ofPattern(TimeFormat.EEEE_D))
     val dayOfWeek = formattedDate.split("/")[0]
     val dayNumber = formattedDate.split("/")[1]
-    val isSelected = date == LocalDate.now()
 
     Column(
         modifier = Modifier
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null
+            ) {
+                onClickTaskDate(date)
+            }
             .size(
-                width = if (isSelected) provideDimensions().dp48 else provideDimensions().dp35,
+                width = if (isSelected) provideDimensions().dp48 else provideDimensions().dp40,
                 height = provideDimensions().dp71
             )
             .background(

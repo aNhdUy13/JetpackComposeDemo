@@ -101,7 +101,10 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.3")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.annotation:annotation:1.7.0")
-    
+
+    // Others
+    implementation("com.jakewharton.threetenabp:threetenabp:1.3.1")
+
     // Test
     implementation("androidx.test:runner:1.5.2")
     testImplementation("junit:junit:4.13.2")

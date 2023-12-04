@@ -212,7 +212,7 @@ private fun homeUiList() = arrayListOf<Any>().apply {
     for (i in 1..10) {
         taskList.add(
             Task(
-                title = "Header $i",
+                title = "Task $i",
                 startTime = "07:00",
                 endTime = "07:15",
                 categories = emptyList(),
