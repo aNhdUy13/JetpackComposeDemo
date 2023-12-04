@@ -66,7 +66,7 @@ fun TitleItemView(
         Text(
             text = headerTitle.subTitle,
             style = text,
-            fontSize = R.dimen.sp14.toSp(),
+            fontSize = R.dimen.sp12.toSp(),
             modifier = Modifier
                 .clickable { onClickSubTitle() }
                 .constrainAs(textSubtitle) {
