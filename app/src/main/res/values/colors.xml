@@ -42,4 +42,6 @@
     <color name="purple_search">#B0B5DD</color>
     <color name="search_bg">#F6F6F6</color>
     <color name="hint_task">#525F77</color>
+
+    <color name="task_background">#F9FAFD</color>
 </resources>

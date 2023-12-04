@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstrainedLayoutReference
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -35,15 +36,19 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
 
 @Composable
-fun TitleItemView(headerTitle: HomeHeaderTitle, modifier: Modifier, onClickSubTitle: () -> Unit) {
+fun TitleItemView(
+    headerTitle: HomeHeaderTitle,
+    isLowWeightTitle: Boolean = false,
+    modifier: Modifier,
+    onClickSubTitle: () -> Unit
+) {
     ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val provideDimension = provideDimensions()
         val (textTitle, textSubtitle) = createRefs()
 
         Text(
             text = headerTitle.title,
-            style = textBold,
-            fontSize = R.dimen.sp24.toSp(),
+            fontSize = if (isLowWeightTitle) R.dimen.sp20.toSp() else R.dimen.sp24.toSp(),
             modifier = Modifier
                 .constrainAs(textTitle) {
                     top.linkTo(
@@ -52,7 +57,10 @@ fun TitleItemView(headerTitle: HomeHeaderTitle, modifier: Modifier, onClickSubTi
                     )
                     start.linkTo(parent.start, margin = provideDimension.dp24)
                 },
-            color = colorResource(id = R.color.home_text_greeting)
+            color = colorResource(id = R.color.home_text_greeting),
+            style = textBold.copy(
+                fontWeight = if (isLowWeightTitle) FontWeight.Normal else FontWeight.Bold
+            )
         )
 
         Text(
@@ -227,6 +235,10 @@ fun TodayTaskItemView(
         modifier = modifier
             .clickable { onClickTask() }
             .fillMaxWidth()
+            .background(
+                color = colorResource(id = R.color.task_background),
+                shape = RoundedCornerShape(provideDimension.dp15)
+            )
             .padding(vertical = provideDimension.dp15, horizontal = provideDimension.dp15)
 
     ) {
@@ -255,7 +267,7 @@ fun TodayTaskItemView(
         )
 
         Text(
-            text = "${task.startTime} = ${task.endTime}",
+            text = "${task.startTime} - ${task.endTime}",
             style = text,
             fontSize = R.dimen.sp14.toSp(),
             modifier = Modifier
@@ -301,7 +313,7 @@ fun TodayTaskItemView(
                 style = text
             )
 
-            Spacer(modifier = Modifier.padding(provideDimension.dp6))
+            Spacer(modifier = Modifier.padding(provideDimension.dp4))
 
             Text(
                 text = "Home",

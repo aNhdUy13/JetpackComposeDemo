@@ -8,13 +8,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -22,7 +23,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
@@ -32,7 +32,9 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import com.mvpvn.jetpackcomposedemo.R
@@ -52,6 +54,7 @@ import org.threeten.bp.format.DateTimeFormatter
 @Composable
 fun TitleItemView(
     taskHeaderTitle: TaskHeaderTitle,
+    isLowWeightTitle: Boolean = false,
     modifier: Modifier,
     onClickSubTitle: () -> Unit
 ) {
@@ -61,8 +64,7 @@ fun TitleItemView(
 
         Text(
             text = taskHeaderTitle.title,
-            style = textBold,
-            fontSize = R.dimen.sp24.toSp(),
+            fontSize = if (isLowWeightTitle) R.dimen.sp20.toSp() else R.dimen.sp24.toSp(),
             modifier = Modifier
                 .constrainAs(textTitle) {
                     top.linkTo(
@@ -71,7 +73,10 @@ fun TitleItemView(
                     )
                     start.linkTo(parent.start, margin = provideDimension.dp24)
                 },
-            color = colorResource(id = R.color.home_text_greeting)
+            color = colorResource(id = R.color.home_text_greeting),
+            style = textBold.copy(
+                fontWeight = if (isLowWeightTitle) FontWeight.Normal else FontWeight.Bold
+            )
         )
 
         if (taskHeaderTitle.isSubTitleContainIcon) {
@@ -108,7 +113,7 @@ fun TaskDateItemView(
     modifier: Modifier,
     taskDate: TaskDate,
     selectedDate: LocalDate,
-    onClickTaskDate: (LocalDate) -> Unit
+    onClickTaskDate: (Int, LocalDate) -> Unit
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -116,13 +121,13 @@ fun TaskDateItemView(
     ) {
         val interactionSource = remember { MutableInteractionSource() }
 
-        taskDate.dateTimeList.forEach {
+        taskDate.dateTimeList.forEachIndexed { index, time ->
             TaskDateChildItemView(
-                date = it,
-                isSelected = selectedDate == it,
+                date = time,
+                isSelected = selectedDate == time,
                 interactionSource = interactionSource
             ) { selectedLocalDate ->
-                onClickTaskDate(selectedLocalDate)
+                onClickTaskDate(index, selectedLocalDate)
             }
         }
     }
@@ -161,7 +166,7 @@ fun TaskTimelineItemView(modifier: Modifier, item: TaskTimeline) {
             style = text
         )
 
-        if (item.taskList.isEmpty()){
+        if (item.taskList.isEmpty()) {
             Text(
                 text = buildAnnotatedString {
                     withStyle(
@@ -195,24 +200,59 @@ fun TaskTimelineItemView(modifier: Modifier, item: TaskTimeline) {
         } else {
             LazyRow(
                 modifier = Modifier
-                    .height(provideDimensions.dp130)
+                    .height(provideDimensions.dp100)
                     .constrainAs(taskList) {
                         top.linkTo(parent.top, margin = provideDimensions.dp16)
                         bottom.linkTo(parent.bottom, margin = provideDimensions.dp16)
                         start.linkTo(time.end, margin = provideDimensions.dp21)
                         end.linkTo(parent.end)
                         width = Dimension.fillToConstraints
-                    },
-                content = {
-
+                    }
+            ) {
+                itemsIndexed(item.taskList) { index: Int, task: Task ->
+                    TaskItemView(
+                        modifier = if (index == item.taskList.size - 1) Modifier.padding(end = provideDimensions.dp30) else Modifier.padding(
+                            end = provideDimensions.dp10
+                        ),
+                        task = task,
+                        onClickTask = {},
+                        onClickMore = {}
+                    )
                 }
-            )
+            }
         }
     }
 }
 
 @Composable
-fun TaskItemView(
+fun EmptyTodayTask() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = provideDimensions().dp50),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(id = R.drawable.img_empty_today_task),
+            contentDescription = "",
+        )
+
+        Text(
+            text = stringResource(id = R.string.empty_today_task),
+            modifier = Modifier.padding(vertical = provideDimensions().dp32),
+            fontSize = R.dimen.sp16.toSp(),
+            color = colorResource(id = R.color.home_text_greeting_content),
+            textAlign = TextAlign.Center,
+            style = text.copy(
+                lineHeight = 24.sp
+            )
+        )
+    }
+}
+
+@Composable
+private fun TaskItemView(
     modifier: Modifier,
     task: Task,
     onClickTask: () -> Unit,
@@ -223,7 +263,11 @@ fun TaskItemView(
     ConstraintLayout(
         modifier = modifier
             .clickable { onClickTask() }
-            .fillMaxWidth()
+            .width(provideDimension.dp190)
+            .background(
+                color = colorResource(id = R.color.task_background),
+                shape = RoundedCornerShape(provideDimension.dp15)
+            )
             .padding(vertical = provideDimension.dp15, horizontal = provideDimension.dp15)
 
     ) {
@@ -252,7 +296,7 @@ fun TaskItemView(
         )
 
         Text(
-            text = "${task.startTime} = ${task.endTime}",
+            text = "${task.startTime} - ${task.endTime}",
             style = text,
             fontSize = R.dimen.sp14.toSp(),
             modifier = Modifier
@@ -298,7 +342,7 @@ fun TaskItemView(
                 style = text
             )
 
-            Spacer(modifier = Modifier.padding(provideDimension.dp6))
+            Spacer(modifier = Modifier.padding(provideDimension.dp4))
 
             Text(
                 text = "Home",
@@ -341,7 +385,7 @@ private fun TaskDateChildItemView(
                 onClickTaskDate(date)
             }
             .size(
-                width = if (isSelected) provideDimensions().dp48 else provideDimensions().dp40,
+                width = provideDimensions().dp45,
                 height = provideDimensions().dp71
             )
             .background(

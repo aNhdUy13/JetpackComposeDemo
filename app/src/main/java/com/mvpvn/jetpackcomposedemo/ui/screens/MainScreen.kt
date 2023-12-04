@@ -74,19 +74,19 @@ fun ConstraintLayoutScope.MainBottomNavigationBar(
     MainScreenNavigator(navController, currentRoute)
     Row(
         modifier = Modifier
-            .padding(horizontal = provideDimension.dp29)
+            .padding(horizontal = provideDimension.dp24)
             .navigationBarsPadding()
             .constrainAs(bottomNavigation) {
                 bottom.linkTo(
                     anchor = parent.bottom,
-                    margin = provideDimension.dp30
+                    margin = provideDimension.dp20
                 )
             }
     ) {
         Row(
             modifier = Modifier
                 .shadow(
-                    elevation = provideDimension.dp5,
+                    elevation = provideDimension.dp3,
                     shape = RoundedCornerShape(provideDimension.dp14)
                 )
                 .background(

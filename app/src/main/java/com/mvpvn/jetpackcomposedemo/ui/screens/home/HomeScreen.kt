@@ -140,9 +140,9 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
 @Composable
 fun HomeBody(taskViewModel: HomeViewModel, modifier: Modifier) {
     val provideDimension = provideDimensions()
-    val viewModel by taskViewModel.homeUiState.collectAsState()
+    val homeUiState by taskViewModel.homeUiState.collectAsState()
 
-    val homeItemList = viewModel.homeUiList()
+    val homeItemList = homeUiState.homeUiList()
     val secondItemPosition = 1
     val thirdItemPosition = 2
     val fourthItemPosition = 3
@@ -177,6 +177,7 @@ fun HomeBody(taskViewModel: HomeViewModel, modifier: Modifier) {
                 is HomeHeaderTitle -> {
                     TitleItemView(
                         headerTitle = item,
+                        isLowWeightTitle = index == thirdItemPosition,
                         modifier = if (index == thirdItemPosition) itemModifier else Modifier,
                         onClickSubTitle = {}
                     )
