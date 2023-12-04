@@ -28,7 +28,9 @@ class TaskViewModel() : ViewModel() {
     }
 
     fun updateSelectedDate(date: LocalDate) {
-
+        taskUiState.update {
+            it.copy(selectedTaskDateState = date)
+        }
     }
 
     private fun getRangeOfHour(): List<String> {

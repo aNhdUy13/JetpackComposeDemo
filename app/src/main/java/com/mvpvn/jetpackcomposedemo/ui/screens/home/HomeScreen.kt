@@ -13,6 +13,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
@@ -22,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.Dimensions
@@ -39,8 +42,10 @@ fun HomeScreen() {
     ) {
 
         val (homeHeader) = createRefs()
+        val taskViewModel: HomeViewModel = viewModel()
 
         HomeBody(
+            taskViewModel = taskViewModel,
             modifier = Modifier.fillMaxSize()
         )
 
@@ -133,10 +138,11 @@ fun HomeHeader(modifier: Modifier, provideDimension: Dimensions) {
 }
 
 @Composable
-fun HomeBody(modifier: Modifier) {
+fun HomeBody(taskViewModel: HomeViewModel, modifier: Modifier) {
     val provideDimension = provideDimensions()
-    val homeItemList = homeUiList()
+    val viewModel by taskViewModel.homeUiState.collectAsState()
 
+    val homeItemList = viewModel.homeUiList()
     val secondItemPosition = 1
     val thirdItemPosition = 2
     val fourthItemPosition = 3
@@ -203,29 +209,9 @@ fun HomeBody(modifier: Modifier) {
     }
 }
 
-private fun homeUiList() = arrayListOf<Any>().apply {
+private fun HomeState.homeUiList() = arrayListOf<Any>().apply {
     add(HomeHeaderTitle("My Task", "", true))
     add(MyTask(""))
     add(HomeHeaderTitle("Today Task", "View all"))
-
-    val taskList = mutableListOf<Any>()
-    for (i in 1..10) {
-        taskList.add(
-            Task(
-                title = "Task $i",
-                startTime = "07:00",
-                endTime = "07:15",
-                categories = emptyList(),
-                color =
-                when (i) {
-                    1 -> R.color.divider_purple
-                    2 -> R.color.red_white
-                    3 -> R.color.green
-                    4 -> R.color.blue
-                    else -> R.color.divider_purple
-                }
-            )
-        )
-    }
     addAll(taskList)
 }
