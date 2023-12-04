@@ -1,6 +1,5 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task.pending
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,12 +14,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.screens.base.BackActionBar
-import com.mvpvn.jetpackcomposedemo.ui.screens.task.TaskBody
-import com.mvpvn.jetpackcomposedemo.ui.screens.task.TaskHeader
-import com.mvpvn.jetpackcomposedemo.ui.screens.task.TaskViewModel
-import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.pending.models.PendingTaskHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.pending.models.PendingTaskSearch
+import com.mvpvn.jetpackcomposedemo.ui.screens.task.pending.models.PendingTaskTimeline
 
 
 @Composable
@@ -40,7 +36,6 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
     val pendingTaskItemList = uiState.toUiList()
     val secondItemPosition = 1
     val thirdItemPosition = 2
-    val fourthItemPosition = 3
 
     LazyColumn(
         modifier = modifier
@@ -54,9 +49,7 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
                 )
 
                 else -> Modifier.padding(
-                    top = provideDimensions().dp10,
-                    start = provideDimensions().dp24,
-                    end = provideDimensions().dp24
+                    top = provideDimensions().dp24
                 )
             }
             when (item) {
@@ -64,10 +57,8 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
                     item = item,
                     modifier = if (index == secondItemPosition) itemModifier else Modifier
                 )
-
                 is PendingTaskSearch -> PendingTaskSearchItemView(item, Modifier)
-                is Task -> PendingTaskTimelineItemView(item)
-
+                is PendingTaskTimeline -> PendingTaskTimelineItemView(item, itemModifier)
             }
         }
     }
