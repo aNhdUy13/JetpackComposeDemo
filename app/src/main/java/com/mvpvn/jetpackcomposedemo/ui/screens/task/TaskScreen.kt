@@ -34,6 +34,7 @@ import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.Dimensions
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
+import com.mvpvn.jetpackcomposedemo.ui.screens.base.verticalBrush
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.EmptyTask
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskDate
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskHeaderTitle
@@ -70,15 +71,7 @@ fun TaskHeader(modifier: Modifier, provideDimensions: Dimensions) {
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.White,
-                        Color.White.copy(alpha = 0f)
-                    )
-                )
-            )
-
+            .background(brush = verticalBrush)
     ) {
         ConstraintLayout(
             modifier = Modifier

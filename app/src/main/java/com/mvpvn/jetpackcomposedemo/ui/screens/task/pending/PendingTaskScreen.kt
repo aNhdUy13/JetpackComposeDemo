@@ -1,6 +1,9 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task.pending
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -8,12 +11,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.screens.base.BackActionBar
+import com.mvpvn.jetpackcomposedemo.ui.screens.base.verticalBrush
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.pending.models.PendingTaskHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.pending.models.PendingTaskSearch
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.pending.models.PendingTaskTimeline
@@ -26,7 +32,13 @@ fun PendingTaskScreen() {
     ) {
         val viewModel: PendingTaskViewModel = viewModel()
         PendingTaskBody(modifier = Modifier.fillMaxSize(), viewModel = viewModel)
-        BackActionBar(stringResource(id = R.string.pending))
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(brush = verticalBrush)
+        ) {
+            BackActionBar(stringResource(id = R.string.pending))
+        }
     }
 }
 
@@ -35,7 +47,6 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
     val uiState by viewModel.pendingTaskUiState.collectAsState()
     val pendingTaskItemList = uiState.toUiList()
     val secondItemPosition = 1
-    val thirdItemPosition = 2
 
     LazyColumn(
         modifier = modifier
@@ -57,6 +68,7 @@ private fun PendingTaskBody(modifier: Modifier = Modifier, viewModel: PendingTas
                     item = item,
                     modifier = if (index == secondItemPosition) itemModifier else Modifier
                 )
+
                 is PendingTaskSearch -> PendingTaskSearchItemView(item, Modifier)
                 is PendingTaskTimeline -> PendingTaskTimelineItemView(item, itemModifier)
             }

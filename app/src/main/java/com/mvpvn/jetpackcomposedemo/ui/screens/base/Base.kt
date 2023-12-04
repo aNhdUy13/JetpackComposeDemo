@@ -1,7 +1,9 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.base
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -11,6 +13,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -19,6 +23,14 @@ import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 
+val verticalBrush = Brush.verticalGradient(
+    colors = listOf(
+        Color.White,
+        Color.White.copy(alpha = 0.8f),
+        Color.White.copy(alpha = 0.5f),
+        Color.White.copy(alpha = 0f)
+    )
+)
 
 @Composable
 fun BackActionBar(title: String) {
@@ -27,8 +39,8 @@ fun BackActionBar(title: String) {
 
     ConstraintLayout(
         modifier = Modifier
-            .systemBarsPadding()
             .fillMaxWidth()
+            .systemBarsPadding()
             .padding(horizontal = provideDimension.dp36, vertical = provideDimension.dp10)
     ) {
         val (spacer, imageBack, textTitle) = createRefs()
