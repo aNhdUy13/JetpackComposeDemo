@@ -45,4 +45,6 @@
     <string name="friday">Friday</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
+    <string name="dont_have_schedule_or">"You don’t have any schedule   or   "</string>
+    <string name="plush_add">+ Add</string>
 </resources>

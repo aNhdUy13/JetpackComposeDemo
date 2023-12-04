@@ -10,8 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Text
@@ -19,10 +22,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
@@ -117,8 +129,86 @@ fun TaskDateItemView(
 }
 
 @Composable
-fun TaskTimelineItemView(item: TaskTimeline) {
+fun TaskTimelineItemView(modifier: Modifier, item: TaskTimeline) {
+    val provideDimensions = provideDimensions()
 
+    ConstraintLayout(modifier = modifier) {
+        val (divider, time, textEmptyTask, taskList) = createRefs()
+
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = provideDimensions.dp24)
+                .constrainAs(divider) { top.linkTo(parent.top) },
+            color = colorResource(id = R.color.divider),
+            thickness = dimensionResource(id = R.dimen.dp1)
+        )
+
+        Text(
+            text = item.time,
+            fontSize = R.dimen.sp14.toSp(),
+            modifier = Modifier
+                .constrainAs(time) {
+                    start.linkTo(divider.start, margin = provideDimensions.dp30)
+                    if (item.taskList.isEmpty()) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    } else {
+                        top.linkTo(divider.bottom, margin = provideDimensions.dp24)
+                    }
+                },
+            color = colorResource(id = R.color.splash_greeting),
+            style = text
+        )
+
+        if (item.taskList.isEmpty()){
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        style = SpanStyle(
+                            color = colorResource(id = R.color.text_time),
+                            fontWeight = FontWeight.Normal,
+                            fontStyle = FontStyle.Normal
+                        )
+                    ) {
+                        append(stringResource(id = R.string.dont_have_schedule_or))
+                    }
+                    withStyle(
+                        style = SpanStyle(
+                            color = colorResource(id = R.color.splash_greeting),
+                            fontWeight = FontWeight.Bold
+                        )
+                    ) {
+                        append(" ${stringResource(id = R.string.plush_add)}")
+                    }
+                },
+                modifier = Modifier
+                    .constrainAs(textEmptyTask) {
+                        top.linkTo(parent.top, margin = provideDimensions.dp16)
+                        bottom.linkTo(parent.bottom, margin = provideDimensions.dp16)
+                        start.linkTo(time.end, margin = provideDimensions.dp21)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    },
+                fontSize = R.dimen.sp14.toSp()
+            )
+        } else {
+            LazyRow(
+                modifier = Modifier
+                    .height(provideDimensions.dp130)
+                    .constrainAs(taskList) {
+                        top.linkTo(parent.top, margin = provideDimensions.dp16)
+                        bottom.linkTo(parent.bottom, margin = provideDimensions.dp16)
+                        start.linkTo(time.end, margin = provideDimensions.dp21)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    },
+                content = {
+
+                }
+            )
+        }
+    }
 }
 
 @Composable

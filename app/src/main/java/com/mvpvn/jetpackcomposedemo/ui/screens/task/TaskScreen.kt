@@ -17,6 +17,8 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,19 +29,16 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.mvpvn.jetpackcomposedemo.R
 import com.mvpvn.jetpackcomposedemo.core.extension.toSp
 import com.mvpvn.jetpackcomposedemo.data.local.provider.Dimensions
 import com.mvpvn.jetpackcomposedemo.data.local.provider.provideDimensions
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskDate
-import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.Task
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskHeaderTitle
 import com.mvpvn.jetpackcomposedemo.ui.screens.task.models.TaskTimeline
 import com.mvpvn.jetpackcomposedemo.ui.theme.text
 import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
-import com.mvpvn.jetpackcomposedemo.utilities.TimeFormat
-import com.mvpvn.jetpackcomposedemo.utilities.getCurrentDate
-import org.threeten.bp.LocalDate
 
 @Composable
 fun TaskScreen() {
@@ -48,8 +47,10 @@ fun TaskScreen() {
     ) {
 
         val (taskHeader) = createRefs()
+        val taskViewModel: TaskViewModel = viewModel()
 
         TaskBody(
+            taskViewModel = taskViewModel,
             modifier = Modifier.fillMaxSize()
         )
 
@@ -152,61 +153,30 @@ fun TaskHeader(modifier: Modifier, provideDimensions: Dimensions) {
 }
 
 @Composable
-fun TaskBody(modifier: Modifier) {
+fun TaskBody(taskViewModel: TaskViewModel, modifier: Modifier) {
     val provideDimension = provideDimensions()
-    val selectedTaskDateState = remember { mutableStateOf(LocalDate.now()) }
+    val taskUiState by taskViewModel.taskUiState.collectAsState()
 
-    val currentDate = LocalDate.now()
-    val currentMonthYear = getCurrentDate(TimeFormat.MMMM_YYYY)
-    val dividedHour = getCurrentDate().split(":")
-    val currentHour = "${dividedHour[0]} h ${dividedHour[1]} min"
-    val dateList = (0 until 7).map { currentDate.plusDays(it.toLong()) }
-    val timelineList = getRangeOfHour().map {
-        TaskTimeline(it)
-    }
-
-    val taskItemList = taskUiList(dateList, timelineList, currentMonthYear, currentHour)
-
-    val secondItemPosition = 1
-    val thirdItemPosition = 2
-    val fourthItemPosition = 3
+    val taskItemList = taskUiState.taskUiList()
+    val position3rd = 2
+    val position4th = 3
+    val lastPosition = taskItemList.size - 1
 
     LazyColumn(
         modifier = modifier
     ) {
         itemsIndexed(taskItemList) { index, item ->
             val itemModifier = when (index) {
-                secondItemPosition -> Modifier.padding(
-                    top = provideDimension.dp14,
-                    start = provideDimension.dp32,
-                    end = provideDimension.dp32
-                )
-
-                thirdItemPosition -> Modifier.padding(top = provideDimension.dp22)
-                fourthItemPosition -> Modifier.padding(
-                    top = provideDimension.dp20,
-                    start = provideDimension.dp24,
-                    end = provideDimension.dp24
-                )
-
-                taskItemList.size - 1 -> Modifier.padding(
-                    top = provideDimension.dp20,
-                    bottom = provideDimension.dp145,
-                    start = provideDimension.dp24,
-                    end = provideDimension.dp24
-                )
-
-                else -> Modifier.padding(
-                    top = provideDimension.dp10,
-                    start = provideDimension.dp24,
-                    end = provideDimension.dp24
-                )
+                position3rd -> Modifier.padding(top = provideDimension.dp22)
+                position4th -> Modifier.padding(top = provideDimension.dp24)
+                lastPosition -> Modifier.padding(bottom = provideDimension.dp145)
+                else -> Modifier
             }
             when (item) {
                 is TaskHeaderTitle -> {
                     TitleItemView(
                         taskHeaderTitle = item,
-                        modifier = if (index == thirdItemPosition) itemModifier else Modifier,
+                        modifier = if (index == position3rd) itemModifier else Modifier,
                         onClickSubTitle = {}
                     )
                 }
@@ -219,46 +189,25 @@ fun TaskBody(modifier: Modifier) {
                             end = provideDimension.dp28
                         ),
                         taskDate = item,
-                        selectedDate = selectedTaskDateState.value,
+                        selectedDate = taskUiState.selectedTaskDateState,
                         onClickTaskDate = { selectedTaskDate ->
-                            selectedTaskDateState.value = selectedTaskDate
+                            taskViewModel.updateSelectedDate(selectedTaskDate)
                         }
                     )
                 }
 
                 is TaskTimeline -> {
-                    TaskTimelineItemView(item)
-                }
-                is Task -> {
-                    TaskItemView(
-                        modifier = if (index == fourthItemPosition || index > fourthItemPosition) itemModifier else Modifier,
-                        task = item,
-                        onClickTask = {
-
-                        },
-                        onClickMore = {
-
-                        }
+                    TaskTimelineItemView(
+                        modifier = if (index == position4th || index == lastPosition) itemModifier else Modifier,
+                        item = item
                     )
                 }
             }
-
         }
     }
 }
 
-private fun getRangeOfHour(): List<String> {
-    return (0..23).map { hour ->
-        String.format("%02d:00", hour)
-    }
-}
-
-private fun taskUiList(
-    dateList: List<LocalDate>,
-    timeList: List<TaskTimeline>,
-    currentMonthYear: String,
-    currentHour: String
-) = arrayListOf<Any>().apply {
+private fun TaskState.taskUiList() = arrayListOf<Any>().apply {
     add(
         TaskHeaderTitle(
             title = "Task",
@@ -269,26 +218,26 @@ private fun taskUiList(
     )
     add(TaskDate(dateList))
     add(TaskHeaderTitle("Today", currentHour))
-    addAll(timeList)
+    addAll(taskTimelineList)
 
-    val taskList = mutableListOf<Any>()
-    for (i in 1..10) {
-        taskList.add(
-            Task(
-                title = "Task $i",
-                startTime = "07:00",
-                endTime = "07:15",
-                categories = emptyList(),
-                color =
-                when (i) {
-                    1 -> R.color.divider_purple
-                    2 -> R.color.red_white
-                    3 -> R.color.green
-                    4 -> R.color.blue
-                    else -> R.color.divider_purple
-                }
-            )
-        )
-    }
-    addAll(taskList)
+//    val taskList = mutableListOf<Any>()
+//    for (i in 1..10) {
+//        taskList.add(
+//            Task(
+//                title = "Task $i",
+//                startTime = "07:00",
+//                endTime = "07:15",
+//                categories = emptyList(),
+//                color =
+//                when (i) {
+//                    1 -> R.color.divider_purple
+//                    2 -> R.color.red_white
+//                    3 -> R.color.green
+//                    4 -> R.color.blue
+//                    else -> R.color.divider_purple
+//                }
+//            )
+//        )
+//    }
+//    addAll(taskList)
 }
