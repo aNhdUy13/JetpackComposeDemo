@@ -33,7 +33,9 @@ fun AppScreenNavigator() {
             composable(
                 route = Screens.Splash.route,
                 enterTransition = { slideInTransition(1000) },
-                exitTransition = { slideOutTransition(-1000) }
+                exitTransition = { slideOutTransition(-1000) },
+                popEnterTransition = { slideInTransition(-1000) },
+                popExitTransition = { slideOutTransition(1000) }
             ) {
                 SplashScreen(
                     navigateMainScreen = { navController.navigateMainScreen() },
@@ -44,7 +46,9 @@ fun AppScreenNavigator() {
             composable(
                 route = Screens.Login.route,
                 enterTransition = { slideInTransition(1000) },
-                exitTransition = { slideOutTransition(-1000) }
+                exitTransition = { slideOutTransition(-1000) },
+                popEnterTransition = { slideInTransition(-1000) },
+                popExitTransition = { slideOutTransition(1000) }
             ) {
                 LoginScreen(
                     navigateMainScreen = { navController.navigateMainScreen() },
@@ -54,7 +58,9 @@ fun AppScreenNavigator() {
             composable(
                 route = Screens.SignUp.route,
                 enterTransition = { slideInTransition(1000) },
-                exitTransition = { slideOutTransition(-1000) }
+                exitTransition = { slideOutTransition(-1000) },
+                popEnterTransition = { slideInTransition(-1000) },
+                popExitTransition = { slideOutTransition(1000) }
             ) {
                 SignUpScreen(
                     navigateMainScreen = { navController.navigateMainScreen() },
@@ -64,7 +70,9 @@ fun AppScreenNavigator() {
             composable(
                 route = Screens.Main.route,
                 enterTransition = { slideInTransition(1000) },
-                exitTransition = { slideOutTransition(-1000) }
+                exitTransition = { slideOutTransition(-1000) },
+                popEnterTransition = { slideInTransition(-1000) },
+                popExitTransition = { slideOutTransition(1000) }
             ) {
                 MainScreen(
                     switchTabAddTask = { navController.navigate(Screens.AddTask.route) },
@@ -80,7 +88,13 @@ fun AppScreenNavigator() {
                 OnGoingTaskScreen()
             }
 
-            composable(route = Screens.PendingTask.route) {
+            composable(
+                route = Screens.PendingTask.route,
+                enterTransition = { slideInTransition(1000) },
+                exitTransition = { slideOutTransition(-1000) },
+                popEnterTransition = { slideInTransition(-1000) },
+                popExitTransition = { slideOutTransition(1000) }
+            ) {
                 PendingTaskScreen()
             }
 
@@ -89,8 +103,10 @@ fun AppScreenNavigator() {
             }
             composable(
                 route = Screens.AddTask.route,
-//                enterTransition = { slideInTransition(1000) },
-//                exitTransition = { slideOutTransition(-1000) }
+                enterTransition = { slideInTransition(1000) },
+                exitTransition = { slideOutTransition(-1000) },
+                popEnterTransition = { slideInTransition(-1000) },
+                popExitTransition = { slideOutTransition(1000) }
             ) {
                 AddTaskScreen()
             }

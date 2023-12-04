@@ -1,6 +1,7 @@
 package com.mvpvn.jetpackcomposedemo.ui.screens.task.add
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -46,6 +48,8 @@ import com.mvpvn.jetpackcomposedemo.ui.theme.textBold
 import com.mvpvn.jetpackcomposedemo.utilities.TimeFormat
 import com.mvpvn.jetpackcomposedemo.utilities.getCurrentDate
 import com.mvpvn.jetpackcomposedemo.utilities.getCurrentTimeLater
+import com.mvpvn.jetpackcomposedemo.utilities.showDatePickerDialog
+import com.mvpvn.jetpackcomposedemo.utilities.showTimePickerDialog
 
 @Composable
 fun AddTaskScreen() {
@@ -57,6 +61,7 @@ fun AddTaskScreen() {
             .systemBarsPadding()
             .verticalScroll(rememberScrollState())
     ) {
+        val context = LocalContext.current
         val currentDate = getCurrentDate(TimeFormat.D_MMMM_YYYY)
         val currentHour = getCurrentDate(TimeFormat.HH_MM_a)
         val currentHourLater = getCurrentTimeLater()
@@ -81,7 +86,7 @@ fun AddTaskScreen() {
             textState = textTitleState,
             textHint = stringResource(id = R.string.hint_title_add_task),
             modifier = Modifier.padding(horizontal = provideDimensions.dp36)
-        )
+        ) {}
         AddTaskTitle(
             title = stringResource(id = R.string.date),
             modifier = Modifier.padding(
@@ -95,7 +100,9 @@ fun AddTaskScreen() {
             modifier = Modifier.padding(horizontal = provideDimensions.dp36),
             isReadOnly = true,
             endIcon = R.drawable.ic_calendar
-        )
+        ) {
+            showDatePickerDialog(context) { textDateState.value = it }
+        }
         AddTaskTitle(
             title = stringResource(id = R.string.time),
             modifier = Modifier.padding(
@@ -115,14 +122,22 @@ fun AddTaskScreen() {
                 isTaskToCenter = true,
                 modifier = Modifier.weight(1f),
                 isReadOnly = true
-            )
+            ) {
+                showTimePickerDialog(context) { hour, min ->
+//                    textStartTimeState.value = it
+                }
+            }
             Spacer(modifier = Modifier.width(provideDimensions.dp15))
             AddTaskSimpleTextField(
                 textState = textEndTimeState,
                 isTaskToCenter = true,
                 modifier = Modifier.weight(1f),
                 isReadOnly = true
-            )
+            ) {
+                showTimePickerDialog(context) { hour, min ->
+//                    textStartTimeState.value = it
+                }
+            }
         }
         AddTaskTitle(
             title = stringResource(id = R.string.description),
@@ -136,7 +151,7 @@ fun AddTaskScreen() {
             textState = textDescriptionState,
             textHint = stringResource(id = R.string.hint_description_add_task),
             modifier = Modifier.padding(horizontal = provideDimensions.dp36)
-        )
+        ) {}
         AddTaskTitle(
             title = stringResource(id = R.string.type),
             modifier = Modifier.padding(
@@ -270,7 +285,7 @@ fun AddTaskType(modifier: Modifier) {
             horizontalArrangement = Arrangement.Center
         ) {
             TaskTypeCheckbox(
-                checked = checkedStatePersonal,
+                isChecked = checkedStatePersonal,
                 checkedIcon = checkedIcon,
                 uncheckedIcon = uncheckedIcon,
                 onCheckedChange = onCheckedChangePersonal
@@ -289,7 +304,7 @@ fun AddTaskType(modifier: Modifier) {
             horizontalArrangement = Arrangement.Center
         ) {
             TaskTypeCheckbox(
-                checked = checkedStatePrivate,
+                isChecked = checkedStatePrivate,
                 checkedIcon = checkedIcon,
                 uncheckedIcon = uncheckedIcon,
                 onCheckedChange = onCheckedChangePrivate
@@ -308,7 +323,7 @@ fun AddTaskType(modifier: Modifier) {
             horizontalArrangement = Arrangement.Center
         ) {
             TaskTypeCheckbox(
-                checked = checkedStateSecret,
+                isChecked = checkedStateSecret,
                 checkedIcon = checkedIcon,
                 uncheckedIcon = uncheckedIcon,
                 onCheckedChange = onCheckedChangeSecret
@@ -333,19 +348,13 @@ fun AddTaskSimpleTextField(
     isSingleLine: Boolean = true,
     startIcon: Int = -1,
     endIcon: Int = -1,
-    iconColor: Color = colorResource(id = R.color.color_purple_white)
+    iconColor: Color = colorResource(id = R.color.color_purple_white),
+    onClickTextField: () -> Unit
 ) {
     val provideDimensions = provideDimensions()
     val interactionSource = remember { MutableInteractionSource() }
 
-    Column(
-        modifier = modifier
-//            .clickable(
-//            interactionSource = interactionSource,
-//            indication = null,
-//            onClick = onClickTextField
-//        )
-    ) {
+    Column(modifier = modifier) {
         BasicTextField(
             value = textState.value,
             onValueChange = { textState.value = it },
@@ -365,6 +374,15 @@ fun AddTaskSimpleTextField(
                             bottom = provideDimensions.dp15,
                             start = if (startIcon != -1) provideDimensions.dp3 else provideDimensions.dp0,
                             end = if (endIcon != -1) provideDimensions.dp3 else provideDimensions.dp0
+                        )
+                        .then(
+                            if (isReadOnly)
+                                Modifier.clickable(
+                                    interactionSource = interactionSource,
+                                    indication = null,
+                                    onClick = onClickTextField
+                                )
+                            else Modifier
                         ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -411,7 +429,6 @@ fun AddTaskSimpleTextField(
             thickness = dimensionResource(id = R.dimen.dp1)
         )
     }
-
 }
 
 @Composable
@@ -428,14 +445,14 @@ fun AddTaskTitle(title: String, modifier: Modifier) {
 
 @Composable
 fun TaskTypeCheckbox(
-    checked: Boolean,
+    isChecked: Boolean,
     checkedIcon: Painter,
     uncheckedIcon: Painter,
     onCheckedChange: ((Boolean) -> Unit)?,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     Image(
-        painter = if (checked) checkedIcon else uncheckedIcon,
+        painter = if (isChecked) checkedIcon else uncheckedIcon,
         contentDescription = "",
         modifier = Modifier
             .size(provideDimensions().dp18)
@@ -444,7 +461,7 @@ fun TaskTypeCheckbox(
                 interactionSource = interactionSource,
                 indication = null
             ) {
-                onCheckedChange?.invoke(!checked)
+                onCheckedChange?.invoke(!isChecked)
             }
     )
 }

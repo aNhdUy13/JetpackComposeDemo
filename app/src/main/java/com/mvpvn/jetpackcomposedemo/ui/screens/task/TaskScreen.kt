@@ -72,6 +72,7 @@ fun TaskHeader(modifier: Modifier, provideDimensions: Dimensions) {
         modifier = modifier
             .fillMaxWidth()
             .background(brush = verticalBrush)
+            .padding(bottom = provideDimensions.dp20)
     ) {
         ConstraintLayout(
             modifier = Modifier
