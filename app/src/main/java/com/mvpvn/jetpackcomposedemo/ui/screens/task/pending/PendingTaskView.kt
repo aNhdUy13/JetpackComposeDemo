@@ -150,20 +150,17 @@ fun PendingTaskSearchItemView(item: PendingTaskSearch, modifier: Modifier) {
 fun PendingTaskTimelineItemView(item: PendingTaskTimeline, modifier: Modifier) {
     val provideDimensions = provideDimensions()
 
-    ConstraintLayout(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(
-                start = provideDimensions().dp24,
-                end = provideDimensions().dp24
-            )
-    ) {
+    ConstraintLayout(modifier = modifier.fillMaxWidth()) {
         val (time, taskList) = createRefs()
 
         Text(
             text = item.time,
             fontSize = R.dimen.sp14.toSp(),
             modifier = Modifier
+                .padding(
+                    start = provideDimensions().dp28,
+                    end = provideDimensions().dp28
+                )
                 .constrainAs(time) {
                     top.linkTo(parent.top)
                     start.linkTo(parent.start)
@@ -177,7 +174,7 @@ fun PendingTaskTimelineItemView(item: PendingTaskTimeline, modifier: Modifier) {
                 .height(provideDimensions().dp100)
                 .constrainAs(taskList) {
                     top.linkTo(time.bottom, margin = provideDimensions.dp16)
-                    start.linkTo(time.start)
+                    start.linkTo(parent.start, margin = provideDimensions.dp28)
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
                 }
